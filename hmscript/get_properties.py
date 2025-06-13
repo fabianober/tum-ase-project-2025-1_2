@@ -46,10 +46,10 @@ for element in allElements:
 
 #Assign them to the dataFrame 
 massDf = pd.DataFrame({
-    'Element ID':elementID,
+    'elements':elementID,
     'mass': elementMass
 })
-massDf = massDf.set_index('Element ID')
+massDf = massDf.set_index('elements')
 massDf.to_csv('element_masses.csv')
 
 
@@ -67,9 +67,9 @@ DIM4 = []
 for beamsection in beamsections:
     ComponentName.append(beamsection.id)
     DIM1.append(beamsection.beamsect_dim1)
-    DIM2.append(beamsection.beamsect_dim1)
-    DIM3.append(beamsection.beamsect_dim1)
-    DIM4.append(beamsection.beamsect_dim1)
+    DIM2.append(beamsection.beamsect_dim2)
+    DIM3.append(beamsection.beamsect_dim3)
+    DIM4.append(beamsection.beamsect_dim4)
 
 #Create data frame 
 stringerPropertiesDf = pd.DataFrame({
