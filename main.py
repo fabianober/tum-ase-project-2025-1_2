@@ -7,10 +7,12 @@ import sys
 
 sys.path.insert(0, os.path.abspath('..'))
 sys.path.insert(0, os.path.abspath('hmscript'))
+sys.path.insert(0, os.path.abspath('formulas'))
 
 from get_properties import *
 from run_analysis import *
 from get_stresses import *
+from mass import *
 
 print("Getting your name...")
 
@@ -24,6 +26,9 @@ print(f"Your name is: {name}")
 print('-----------------------')
 print('Running get_properties...')
 run_get_properties(name=name)
+
+total_mass = total_mass(name=name)
+print(f"Total mass of the structure: {total_mass} kg")
 
 # run analysis and clean up
 print('-----------------------')
