@@ -54,3 +54,8 @@ def reverseColumn_Euler_thickness_skin(RF_goal, DIM1, DIM2, DIM3, DIM4, stringer
     thickness_skin_rev = sympy.solve(optimization, thickness_skin)
     return thickness_skin_rev
 #Has to be decided if thickness_skin should be rverse engineered for column buckling, biaxial panel buckling and shear panel buckling and then the maximum is used for optimization
+
+#testcase for column buckling reverse engineering
+if __name__ == '__main__':
+    testopt_DIM1 = reverseColumn_Euler_DIM1(RF_goal=0.9, DIM2=2, DIM3=20, DIM4=15, stringer_pitch=200, thickness_skin=4, length=750, c=1, EModulus=65241.07, sigma_applied=-80.922204)
+    print(testopt_DIM1) 
