@@ -226,7 +226,7 @@ def calculate_stringers(name):
     })
 
     # ## Output stringer score
-    evaluateDf.to_csv(os.path.join(BASE_DIR, f'../data/{name}/output/stringerScore.csv'))
+    evaluateDf.to_csv(os.path.join(BASE_DIR, f'../data/{name}/output/stringerScore.csv'), index=False)
 
     # # Cleanup data for output 
     # ## Drop unenessacry columns 

@@ -159,7 +159,7 @@ def calculate_panels(name):
     # ## Save score file
 
     #evaluateDf = evaluateDf.round(rounding_digits)
-    evaluateDf.to_csv(os.path.join(BASE_DIR, f'../data/{name}/output/panelScore.csv'))
+    evaluateDf.to_csv(os.path.join(BASE_DIR, f'../data/{name}/output/panelScore.csv'), index=False)
 
 
     # # Create original output
