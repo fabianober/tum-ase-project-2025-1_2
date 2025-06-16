@@ -196,6 +196,9 @@ cython_debug/
 
 # Custom
 .DS_Store
+data/*
+hwsolver.mesg
+hwreport/
 
 # Ignore temporary Excel files in all directories
 ~$*.xlsx
