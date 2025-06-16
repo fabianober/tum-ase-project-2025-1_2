@@ -16,6 +16,7 @@ def rf_score(row):
     else: 
         score = rfPosScaling * abs(row['Reserve Factor'] -RF_goal)
     return score
+
 # mass score 
 def massScoreCalc():
     score = 0
