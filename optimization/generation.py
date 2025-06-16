@@ -20,3 +20,9 @@ def extractThickness(df):
     for i in range(1,6):
         thicknesses.append(df.thickness[i])
     return thicknesses
+
+def extractDimensions(df):
+    dimensions = []
+    for i in range(0,5):
+        dimensions.append([df.dim1[i], df.dim2[i], df.dim3[i], df.dim4[i]])
+    return dimensions
