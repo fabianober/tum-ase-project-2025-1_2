@@ -4,11 +4,13 @@ import hm.entities as ent
 model = hm.Model()
 
 #Change the panel Thickness
-def changePanelThickness(model, panelThickness):
+def changePanelThickness(panelThickness):
     parameters = hm.Collection(model, ent.Parameter)
+    print("Changing panel thickness")
     for param in parameters:
         if param.name == 'panelT1':
             param.valuedouble = panelThickness[0]
+            print(panelThickness[0])
         elif param.name == 'panelT2' :
             param.valuedouble = panelThickness[1]
         elif param.name =='panelT3' :
@@ -21,7 +23,7 @@ def changePanelThickness(model, panelThickness):
 
 
 #Offsets panel elements to the correct position
-def updatePanelOffset(model,skinThickness):
+def updatePanelOffset(skinThickness):
    """
    Here we shift the nodes of the individual panel elements 
    into the skin stringer intersection point 
@@ -47,7 +49,7 @@ def updatePanelOffset(model,skinThickness):
 
 
 
-def changeStringerDimensions(model, stringerDim):
+def changeStringerDimensions(stringerDim):
     beamsects = hm.Collection(model, ent.Beamsection)
     for beamsect in beamsects:  
         if beamsect.name == 'Stringer_Section1' or beamsect.name == 'Stringer_Section9':
@@ -79,7 +81,7 @@ def changeStringerDimensions(model, stringerDim):
     return None
 
 #Offsets stringer elements to the correct position
-def updateStringerOffset(model):
+def updateStringerOffset():
     """
    Here we shift the nodes of the individual stringer elements 
    into the skin stringer intersection point
@@ -118,11 +120,11 @@ def updateStringerOffset(model):
 
 
 
-def changeParameters(model, skinTickness, stringerDim):
-    changePanelThickness(model, skinTickness) #update panel Dimensions
-    changeStringerDimensions(model, stringerDim)  #update stringer dimensions 
-    updatePanelOffset(model,skinTickness)
-    updateStringerOffset(model)
+def changeParameters(skinTickness, stringerDim):
+    changePanelThickness(skinTickness) #update panel Dimensions
+    changeStringerDimensions(stringerDim)  #update stringer dimensions 
+    updatePanelOffset(skinTickness)
+    updateStringerOffset()
 
 
 

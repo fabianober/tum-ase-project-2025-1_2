@@ -1,6 +1,6 @@
 import random
 import pandas as pd
-
+import ast
 
 # Parameters for the optimization 
 rfPosScaling = 100
@@ -42,12 +42,14 @@ def extractDimensions(df):
 def randomizeParameters(panelThickness, stringerDims):
     newPanelThickness = []
     for t in panelThickness:
+        t = float(t)
         change = random.randint(-30, 30)/100
-        newPanelThickness.append(t+change)
+        newPanelThickness.append(t + change)
     newStringerDims = []
     for stringer in stringerDims:
         newStDim = []
         for dim in stringer:
+            dim = float(dim)
             change = random.randint(-30, 30)/100
             newStDim.append(dim+change)
         newStringerDims.append(newStDim)
@@ -56,7 +58,38 @@ def randomizeParameters(panelThickness, stringerDims):
 # Compute and append the score of one iteration
 def combinedScore(name):
     # Import already existing iterations
-    scoreDf = pd.read_csv(f'./data/{name}/output/generation.csv')
+    try:
+        print("Doing the correct thing")
+        scoreDf = pd.read_csv(f'./data/{name}/output/children.csv')
+        # Import files to compute new score 
+        panelScoreDf = pd.read_csv(f'./data/{name}/output/panelScore.csv')
+        stringerScoreDf = pd.read_csv(f'./data/{name}/output/stringerScore.csv')
+        massScore = massScoreCalc()
+        # Concat to one new parameter score entry
+        newscoreDf = pd.DataFrame({
+            'panel thickness':[panelScoreDf['panel thickness'][0]],
+            'stringer Parameters':[stringerScoreDf['stringer Parameters'][0]],
+            'score':[massScore+panelScoreDf.score[0] + stringerScoreDf.score[0]]
+        })
+
+        scoreDf=pd.concat([scoreDf, newscoreDf], axis=0)
+        scoreDf.to_csv(f'./data/{name}/output/children.csv', index=False)
+    except:
+        print("Doing the initial step")
+        # Import files to compute new score 
+        panelScoreDf = pd.read_csv(f'./data/{name}/output/panelScore.csv')
+        stringerScoreDf = pd.read_csv(f'./data/{name}/output/stringerScore.csv')
+        massScore = massScoreCalc()
+        # Concat to one new parameter score entry
+        newscoreDf = pd.DataFrame({
+            'panel thickness':[panelScoreDf['panel thickness'][0]],
+            'stringer Parameters':[stringerScoreDf['stringer Parameters'][0]],
+            'score':[massScore+panelScoreDf.score[0] + stringerScoreDf.score[0]]
+        })
+        newscoreDf.to_csv(f'./data/{name}/output/children.csv', index=False)
+    return None 
+
+def oneScoreDf(name):
     # Import files to compute new score 
     panelScoreDf = pd.read_csv(f'./data/{name}/output/panelScore.csv')
     stringerScoreDf = pd.read_csv(f'./data/{name}/output/stringerScore.csv')
@@ -67,9 +100,6 @@ def combinedScore(name):
         'stringer Parameters':[stringerScoreDf['stringer Parameters'][0]],
         'score':[massScore+panelScoreDf.score[0] + stringerScoreDf.score[0]]
     })
-
-    scoreDf=pd.concat([scoreDf, newscoreDf], axis=0)
-    scoreDf.to_csv(f'./data/{name}/output/generation.csv', index=False)
-    return None 
-
+    newscoreDf.to_csv(f'./data/{name}/output/generations.csv', index=False)
+    return None
 combinedScore(name='yannis')
