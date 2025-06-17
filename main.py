@@ -98,9 +98,11 @@ for i in range(0,NumGenerations):
         calculate_stringers(name=name)
         combinedScore(name=name)
     print('FIRST GENERATION DONE')
+    generationDf = pd.read_csv(f'./data/{name}/output/generations.csv')
     scoreDf = pd.read_csv(f'./data/{name}/output/children.csv')
     min_row = scoreDf.loc[scoreDf['score'].idxmin()]
-    generationDf=pd.concat([generationDf, min_row], axis=0, ignore_index=True)
+    min_row = min_row.to_frame().T
+    generationDf=pd.concat([generationDf, min_row], axis=0)
     generationDf = generationDf.sort_values(by='score', ascending=True).reset_index(drop=True)
     generationDf.to_csv(f'./data/{name}/output/generations.csv', index=False)
 
