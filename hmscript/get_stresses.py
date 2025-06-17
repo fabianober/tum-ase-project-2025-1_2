@@ -76,9 +76,9 @@ def parse_panels(section, subcase_label):
                 ])
     return data
 
-def main():
+def run_get_stresses(name):
     # Read the .strs file
-    with open("Test.strs", "r") as file:
+    with open(f"data/{name}/hmout/input.strs", "r") as file:
         content = file.read()
 
     stringer_all = []
@@ -105,9 +105,9 @@ def main():
     )
 
     # Save to CSV files
-    df_stringer.to_csv("stringer.csv", index=False)
-    df_panel.to_csv("panel.csv", index=False)
+    df_stringer.to_csv(f"data/{name}/stringer.csv", index=False)
+    df_panel.to_csv(f"data/{name}/panel.csv", index=False)
     print("CSV files 'stringer.csv' and 'panel.csv' have been created.")
 
 if __name__ == "__main__":
-    main()
+    run_get_stresses()
