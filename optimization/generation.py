@@ -59,7 +59,7 @@ def randomizeParameters(panelThickness, stringerDims):
 def combinedScore(name):
     # Import already existing iterations
     try:
-        print("Doing the correct thing")
+        #print("Doing the correct thing")
         scoreDf = pd.read_csv(f'./data/{name}/output/children.csv')
         # Import files to compute new score 
         panelScoreDf = pd.read_csv(f'./data/{name}/output/panelScore.csv')
@@ -75,7 +75,7 @@ def combinedScore(name):
         scoreDf=pd.concat([scoreDf, newscoreDf], axis=0)
         scoreDf.to_csv(f'./data/{name}/output/children.csv', index=False)
     except:
-        print("Doing the initial step")
+        #print("Doing the initial step")
         # Import files to compute new score 
         panelScoreDf = pd.read_csv(f'./data/{name}/output/panelScore.csv')
         stringerScoreDf = pd.read_csv(f'./data/{name}/output/stringerScore.csv')
@@ -102,4 +102,4 @@ def oneScoreDf(name):
     })
     newscoreDf.to_csv(f'./data/{name}/output/generations.csv', index=False)
     return None
-combinedScore(name='yannis')
+#combinedScore(name='yannis')
