@@ -40,7 +40,7 @@ def personal_data_provider(name):
     if name == 'yannis':
         sigma_yield = 490
         EModulus = 65241.07
-        nu = 0.34 
+        nu = 0.34
     elif name == 'fabian':
         sigma_yield = 490
         EModulus = 65420.46

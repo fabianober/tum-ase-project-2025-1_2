@@ -1,12 +1,24 @@
 import random
 import pandas as pd
 import ast
+import sys 
+import os
+
+
+# Join paths for own modules 
+sys.path.insert(0, os.path.abspath('..')) 
+sys.path.insert(0, os.path.abspath('formulas'))
+#Import own modules 
+from mass import *
+from helpers import *
+
 
 # Parameters for the optimization 
 rfPosScaling = 100
-rfNegScaling = 200
-weightScaling = 20
-RF_goal = 1.05
+rfNegScaling = 400
+NegweightScaling = 1000
+PosweightScaling = 50
+RF_goal = 1.03
 
 
 # Assign the RF a score 
@@ -18,9 +30,15 @@ def rf_score(row):
     return score
 
 # mass score 
-def massScoreCalc():
-    score = 0
-    return score 
+def massScoreCalc(name):
+    maxMass = 28.625
+    total_mass = total_mass(name=name)
+    clearance = maxMass-total_mass
+    if clearance <= 0:
+        massScore = abs(clearance) * NegweightScaling
+    else:
+        massScore = (1/clearance) * PosweightScaling
+    return massScore 
 
 
 

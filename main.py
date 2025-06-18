@@ -30,7 +30,7 @@ model = hm.Model()
 
 '''Parameters for running the generational algorithm'''
 NumGenerations = 2
-NumChildren = 15
+NumChildren = 10
 
 
 print("Getting your name...")
@@ -146,9 +146,9 @@ def evolution():
         # For now we reset the parameters afterwards
         print('Resetting model-parameters to initial values...')
 
-# evolution()
+evolution()
 
-Run_Optimisation_Ad_V3()
+#Run_Optimisation_Ad_V3()
 
 def Test():
     print("starting test")
