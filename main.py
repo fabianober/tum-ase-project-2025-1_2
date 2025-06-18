@@ -29,7 +29,7 @@ from run_optimizer_adaptiveV3_6_fin import *
 model = hm.Model()
 
 '''Parameters for running the generational algorithm'''
-NumGenerations = 4
+NumGenerations = 2
 NumChildren = 15
 
 
@@ -96,6 +96,14 @@ def evolution():
         panelThick = ast.literal_eval(generationDf['panel thickness'][0])
         StringerDim = ast.literal_eval(generationDf['stringer Parameters'][0])
         for j in range(0, NumChildren):
+        
+            # For security, we check if we want to abbort. We read the file every time to ensure we catch any changes.
+            with open("abort.bye", "r") as f:
+                abort = f.read().strip()
+            if abort == "1":
+                print("Aborting the generational algorithm. Bye...")
+                sys.exit()
+    
             child_start_time = time.time()
             newpanelThick, newStringerDim = randomizeParameters(panelThickness=panelThick, stringerDims=StringerDim)
             changeParameters(newpanelThick, newStringerDim)
@@ -124,19 +132,19 @@ def evolution():
         generationDf = pd.concat([generationDf, min_row], axis=0)
         generationDf = generationDf.sort_values(by='score', ascending=True).reset_index(drop=True)
         generationDf.to_csv(f'./data/{name}/output/generations.csv', index=False)
-
+    
         # Delete the children.csv file to avoid confusion
         children_file = f'./data/{name}/output/children.csv'
         if os.path.exists(children_file):
             os.remove(children_file)
-
+    
         gen_end_time = time.time()
         gen_duration = gen_end_time - gen_start_time
         print(f'GENERATION {i+1}/{NumGenerations} DONE | Time: {gen_duration:.2f} s')
-
-
-    # For now we reset the parameters afterwards
-    print('Resetting model-parameters to initial values...')
+    
+    
+        # For now we reset the parameters afterwards
+        print('Resetting model-parameters to initial values...')
 
 # evolution()
 
