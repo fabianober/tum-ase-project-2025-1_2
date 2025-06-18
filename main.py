@@ -23,12 +23,13 @@ from mass import *
 from calculate_panels import *
 from calculate_stringers import *
 from generation import *
+import os
 
 model = hm.Model()
 
 '''Parameters for running the generational algorithm'''
-NumGenerations = 2
-NumChildren = 8
+NumGenerations = 4
+NumChildren = 15
 
 
 print("Getting your name...")
@@ -114,7 +115,7 @@ for i in range(0, NumGenerations):
         rem_h = int(remaining_time // 3600)
         rem_m = int((remaining_time % 3600) // 60)
         rem_s = int(remaining_time % 60)
-        print(f'CHILD NR. {j+1}/{NumChildren} gen{i+1}  DONE -  this is {progress:.1f}% | Time: {child_duration:.2f} s | Remaining: {rem_h}h {rem_m}m {rem_s}s')
+        print(f'CHILD {j+1}/{NumChildren} gen{i+1}/{NumGenerations} DONE | {progress:.1f}% | Time: {child_duration:.2f} s | Remaining: {rem_h}h {rem_m}m {rem_s}s')
     generationDf = pd.read_csv(f'./data/{name}/output/generations.csv')
     scoreDf = pd.read_csv(f'./data/{name}/output/children.csv')
     min_row = scoreDf.loc[scoreDf['score'].idxmin()]
@@ -122,11 +123,18 @@ for i in range(0, NumGenerations):
     generationDf = pd.concat([generationDf, min_row], axis=0)
     generationDf = generationDf.sort_values(by='score', ascending=True).reset_index(drop=True)
     generationDf.to_csv(f'./data/{name}/output/generations.csv', index=False)
+
+    # Delete the children.csv file to avoid confusion
+    children_file = f'./data/{name}/output/children.csv'
+    if os.path.exists(children_file):
+        os.remove(children_file)
+
     gen_end_time = time.time()
     gen_duration = gen_end_time - gen_start_time
-    print(f'GENERATION NR. {i+1}/{NumGenerations}  DONE | Time: {gen_duration:.2f} s')
+    print(f'GENERATION {i+1}/{NumGenerations} DONE | Time: {gen_duration:.2f} s')
 
 
 # For now we reset the parameters afterwards
 print('Resetting model-parameters to initial values...')
+
 changeParameters([4.0,4.0,4.0,4.0,4.0],[[25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15]])
