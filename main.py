@@ -29,8 +29,8 @@ from run_optimizer_adaptiveV3_6_fin import *
 model = hm.Model()
 
 '''Parameters for running the generational algorithm'''
-NumGenerations = 10
-NumChildren = 20
+NumGenerations = 15
+NumChildren = 25
 
 
 print("Getting your name...")
