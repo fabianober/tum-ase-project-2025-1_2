@@ -29,8 +29,8 @@ from run_optimizer_adaptiveV3_6_fin import *
 model = hm.Model()
 
 '''Parameters for running the generational algorithm'''
-NumGenerations = 2
-NumChildren = 10
+NumGenerations = 10
+NumChildren = 20
 
 
 print("Getting your name...")
@@ -77,11 +77,11 @@ calculate_stringers(name=name)"""
 
 
 # For now create the score of the originial model 
-run_get_properties(name=name)
-run_run_analysis(name=name)
-calculate_panels(name=name)
-calculate_stringers(name=name)
-oneScoreDf(name=name, index=0)
+#run_get_properties(name=name)
+#run_run_analysis(name=name)
+#calculate_panels(name=name)
+#calculate_stringers(name=name)
+#oneScoreDf(name=name, index=0)
 
 # Here the generational algorithm is run 
 
