@@ -25,7 +25,7 @@ def calculate_panels(name):
     sigma_yield = personal_data[0]
     EModulus = personal_data[1]
     nu = personal_data[2]
-    print(f"CP: Your personal data is: sigma_yield = {sigma_yield}, EModulus = {EModulus}, nu = {nu}. Please verify!")
+    #print(f"CP: Your personal data is: sigma_yield = {sigma_yield}, EModulus = {EModulus}, nu = {nu}. Please verify!")
 
     #Panel constants 
     length = 750
@@ -190,7 +190,7 @@ def calculate_panels(name):
     updateParametersDf = updateParametersDf.round(rounding_digits)
     updateParametersDf.to_csv(os.path.join(BASE_DIR, f'../data/{name}/output/update_e.csv'))
 
-    print(f"CP: Successfully calculated panels for {name} and saved the results to the data folder.")
+    #print(f"CP: Successfully calculated panels for {name} and saved the results to the data folder.")
 
 if __name__ == "__main__":
     calculate_panels('fabian')

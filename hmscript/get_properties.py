@@ -83,4 +83,4 @@ def run_get_properties(name):
     stringerPropertiesDf = stringerPropertiesDf.set_index('beamsects')
     stringerPropertiesDf.to_csv(f'data/{name}/properties/stringer_properties.csv')
 
-    print('Properties might have been saved successfully!')
+    #print('Properties might have been saved successfully!')
