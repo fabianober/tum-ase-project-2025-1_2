@@ -31,9 +31,9 @@ USER_INPUTS = {
         'skin_thickness_1', 'skin_thickness_2', 'skin_thickness_3', 'skin_thickness_4', 'skin_thickness_5'
     ],
     'bounds': [(22, 30)] * 5 + #Dim1 (height)
-              [(15, 25)] * 5 + #Dim3
-              [(10, 20)] * 5 + #Dim 4
-              [(1.2, 4)] * 5 + #Dim2
+              [(15, 25)] * 5 + #Dim3 (head width)
+              [(10, 20)] * 5 + #Dim 4 (leg length)
+              [(1.2, 4)] * 5 + #Dim2 ("thickness")
               [(4, 7)] * 5, #Skin thickness
     'target_rf': 1.05,
     'fem_call_budget': 6000,  # Can be increased
@@ -352,7 +352,7 @@ def find_best_and_near_misses(results, target_rf, top_n=3):
 
 # --- Main Program ---
 
-def Run_Optimisation():
+def Run_Optimisation_Ad_V3():
     make_log_folder(USER_INPUTS['log_folder'])
     # Unique run name
     run_base = unique_run_name(USER_INPUTS['run_id_prefix'], USER_INPUTS['log_folder'])

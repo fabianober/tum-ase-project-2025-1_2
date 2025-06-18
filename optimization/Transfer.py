@@ -1,14 +1,25 @@
 import numpy as np
 import pandas as pd
 import os
+import sys
 
 from formulas.mass import total_mass
 
+
+sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('hmscript'))
+sys.path.insert(0, os.path.abspath('formulas'))
+sys.path.insert(0, os.path.abspath('calculators'))
+sys.path.insert(0, os.path.abspath('optimization'))
+
+
 # --- Run pipeline ---
-from hmscript.change_properties import changeParameters
-from hmscript.run_analysis import run_get_properties, run_run_analysis
-from calculators.calculate_panels import calculate_panels
-from calculators.calculate_stringers import calculate_stringers
+from change_properties import changeParameters
+from run_analysis import run_run_analysis
+from get_properties import run_get_properties
+from calculate_panels import calculate_panels
+from calculate_stringers import calculate_stringers
+from get_stresses import run_get_stresses
 
 def fem_evaluate_vector(
     x,
@@ -41,17 +52,30 @@ def fem_evaluate_vector(
         Dim4 = float(x[10+i])     # lip_height_i
         stringerDim.append([Dim1, Dim2, Dim3, Dim4])
 
+    #print(Dim1)
+    #print(Dim2)
+    #print(Dim3)
+    #print(Dim4)
+    #print(stringerDim)
+    #print(skinThickness)
 
     # Change parameters in model
+    #print("Starting change parameters with input:")
+    #print(skinThickness, stringerDim)
     changeParameters(skinThickness, stringerDim)
     # Compute geometric properties (if needed)
+    #print("Running get properties")
     run_get_properties(person)
     # Run full FEA
+    #print("Running analysis")
     run_run_analysis(person)
+
+    run_get_stresses(person)
     # Calculate panel and stringer results (writes CSV)
+    #print("Calculating RFs")
     calculate_panels(person)
     calculate_stringers(person)
-
+    #print("RFs claculated")
     #total_mass = total_mass(name=name)
     # Mass (robustly read)
     #mass_file = os.path.join(outdir, "totalMass.txt")
