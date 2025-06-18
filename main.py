@@ -25,8 +25,8 @@ from generation import *
 model = hm.Model()
 
 '''Parameters for running the generational algorithm'''
-NumGenerations = 1
-NumChildren = 2
+NumGenerations = 2
+NumChildren = 8
 
 
 print("Getting your name...")
@@ -77,11 +77,11 @@ calculate_stringers(name=name)"""
 
 
 # For now create the score of the originial model 
-run_get_properties(name=name)
-run_run_analysis(name=name)
-calculate_panels(name=name)
-calculate_stringers(name=name)
-oneScoreDf(name=name)
+#run_get_properties(name=name)
+#run_run_analysis(name=name)
+#calculate_panels(name=name)
+#calculate_stringers(name=name)
+#oneScoreDf(name=name)
 
 
 # Here the generational algorithm is run 
@@ -97,7 +97,8 @@ for i in range(0,NumGenerations):
         calculate_panels(name=name)
         calculate_stringers(name=name)
         combinedScore(name=name)
-    print('FIRST GENERATION DONE')
+        progress = ((i * NumChildren + (j + 1)) / (NumGenerations * NumChildren)) * 100
+        print(f'CHILD NR. {j+1}/{NumChildren} gen{i+1}  DONE -  this is {progress:.1f}%')
     generationDf = pd.read_csv(f'./data/{name}/output/generations.csv')
     scoreDf = pd.read_csv(f'./data/{name}/output/children.csv')
     min_row = scoreDf.loc[scoreDf['score'].idxmin()]
@@ -105,6 +106,7 @@ for i in range(0,NumGenerations):
     generationDf=pd.concat([generationDf, min_row], axis=0)
     generationDf = generationDf.sort_values(by='score', ascending=True).reset_index(drop=True)
     generationDf.to_csv(f'./data/{name}/output/generations.csv', index=False)
+    print(f'GENERATION NR. {i+1}/{NumGenerations}  DONE')
 
 
 # For now we reset the parameters afterwards

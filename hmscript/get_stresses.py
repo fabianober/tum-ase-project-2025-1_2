@@ -107,7 +107,7 @@ def run_get_stresses(name):
     # Save to CSV files
     df_stringer.to_csv(f"data/{name}/stringer.csv", index=False)
     df_panel.to_csv(f"data/{name}/panel.csv", index=False)
-    print("CSV files 'stringer.csv' and 'panel.csv' have been created.")
+    #print("CSV files 'stringer.csv' and 'panel.csv' have been created.")
 
 if __name__ == "__main__":
     run_get_stresses()

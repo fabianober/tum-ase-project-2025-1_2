@@ -20,7 +20,7 @@ def calculate_stringers(name):
     personal_data = personal_data_provider(name)
     sigma_yield = personal_data[0]
     EModulus = personal_data[1]
-    print(f"Your personal data is: sigma_yield = {sigma_yield}, EModulus = {EModulus}. Please verify.")
+    #print(f"Your personal data is: sigma_yield = {sigma_yield}, EModulus = {EModulus}. Please verify.")
 
     stringer_pitch = 200
     effective_width = stringer_pitch/2
@@ -67,8 +67,8 @@ def calculate_stringers(name):
     loadCase1dfStringer = stringerdf[stringerdf["Load Case"] == 'Subcase 1 (LC1)']
     loadCase2dfStringer = stringerdf[stringerdf["Load Case"] == 'Subcase 2 (LC2)']
     loadCase3dfStringer = stringerdf[stringerdf["Load Case"] == 'Subcase 3 (LC3)']
-    #print(loadCase1dfPanel.head(5))
-    #print(loadCase1dfStringer.head(5))
+    ##print(loadCase1dfPanel.head(5))
+    ##print(loadCase1dfStringer.head(5))
 
     # # Now we need to combine the panels and the stringers
     # For every loadcase
@@ -214,6 +214,9 @@ def calculate_stringers(name):
     evaluateDf = evaluateDf.drop(['index'], axis=1)
 
     evaluateDf = evaluateDf.drop(['Volume' ,'thickness' , 'sigma_XX_avg', 'I_yy',  'areaTot', 'VolumeTot', 'sigma_crip', 'lambda_crit', 'lambda', 'r_gyr', 'sigma_crit'], axis =1)
+
+    evaluateDf.to_csv(os.path.join(BASE_DIR, f'../data/{name}/output/StringerRFs.csv'), index=False)
+
     evaluateDf['score'] = evaluateDf.apply(rf_score, axis=1)
 
     # ## Extract score and parameters
@@ -255,7 +258,7 @@ def calculate_stringers(name):
     # # Generate output file
     outputdf.to_excel(os.path.join(BASE_DIR, f'../data/{name}/output/processed_f.xlsx'))
 
-    print("CS: Stringer calculations completed successfully.")
+    #print("CS: Stringer calculations completed successfully.")
 
 if __name__ == "__main__":
     calculate_stringers('fabian')

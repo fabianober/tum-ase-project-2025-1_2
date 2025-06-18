@@ -6,11 +6,11 @@ model = hm.Model()
 #Change the panel Thickness
 def changePanelThickness(panelThickness):
     parameters = hm.Collection(model, ent.Parameter)
-    print("Changing panel thickness")
+    #print("Changing panel thickness")
     for param in parameters:
         if param.name == 'panelT1':
             param.valuedouble = panelThickness[0]
-            print(panelThickness[0])
+            #print(panelThickness[0])
         elif param.name == 'panelT2' :
             param.valuedouble = panelThickness[1]
         elif param.name =='panelT3' :
@@ -121,8 +121,8 @@ def updateStringerOffset():
 
 
 def changeParameters(skinTickness, stringerDim):
-    changePanelThickness(skinTickness) #update panel Dimensions
-    changeStringerDimensions(stringerDim)  #update stringer dimensions 
+    changePanelThickness(skinTickness) #update panel Dimensions (array of 5 thicknesses)
+    changeStringerDimensions(stringerDim)  #update stringer dimensions (list within list, (Dim1: height, Dim2; thickness, Dim3: "head" width, Dim4: length of Omega 'legs'))
     updatePanelOffset(skinTickness)
     updateStringerOffset()
 
