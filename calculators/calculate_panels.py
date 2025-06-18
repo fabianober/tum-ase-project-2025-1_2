@@ -142,6 +142,9 @@ def calculate_panels(name):
 
 
     evaluateDf = evaluateDf.drop(['sigmaXX', 'sigmaYY', 'sigmaXY', 'length', 'width', 'k_shear', 'k_biaxial'], axis =1)
+
+    evaluateDf.to_csv(os.path.join(BASE_DIR, f'../data/{name}/output/PanelRFs.csv'), index=False)
+
     evaluateDf['score'] = evaluateDf.apply(rf_score, axis=1)
 
 

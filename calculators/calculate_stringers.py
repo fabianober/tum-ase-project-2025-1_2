@@ -214,6 +214,9 @@ def calculate_stringers(name):
     evaluateDf = evaluateDf.drop(['index'], axis=1)
 
     evaluateDf = evaluateDf.drop(['Volume' ,'thickness' , 'sigma_XX_avg', 'I_yy',  'areaTot', 'VolumeTot', 'sigma_crip', 'lambda_crit', 'lambda', 'r_gyr', 'sigma_crit'], axis =1)
+
+    evaluateDf.to_csv(os.path.join(BASE_DIR, f'../data/{name}/output/StringerRFs.csv'), index=False)
+
     evaluateDf['score'] = evaluateDf.apply(rf_score, axis=1)
 
     # ## Extract score and parameters
