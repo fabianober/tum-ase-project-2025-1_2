@@ -77,11 +77,11 @@ calculate_stringers(name=name)"""
 
 
 # For now create the score of the originial model 
-#run_get_properties(name=name)
-#run_run_analysis(name=name)
-#calculate_panels(name=name)
-#calculate_stringers(name=name)
-#oneScoreDf(name=name)
+run_get_properties(name=name)
+run_run_analysis(name=name)
+calculate_panels(name=name)
+calculate_stringers(name=name)
+oneScoreDf(name=name, index=0)
 
 # Here the generational algorithm is run 
 
@@ -89,7 +89,8 @@ def evolution():
     total_children = NumGenerations * NumChildren
     child_times = []
     children_done = 0
-
+    generationDf = pd.read_csv(f'./data/{name}/output/generations.csv')
+    currentIndex = generationDf['GenIndex'].max()
     for i in range(0, NumGenerations):
         gen_start_time = time.time()
         generationDf = pd.read_csv(f'./data/{name}/output/generations.csv')
@@ -111,7 +112,7 @@ def evolution():
             run_run_analysis(name=name)
             calculate_panels(name=name)
             calculate_stringers(name=name)
-            combinedScore(name=name)
+            combinedScore(name=name, index=currentIndex+i+1)
             progress = ((i * NumChildren + (j + 1)) / (NumGenerations * NumChildren)) * 100
             child_end_time = time.time()
             child_duration = child_end_time - child_start_time
@@ -143,8 +144,7 @@ def evolution():
         print(f'GENERATION {i+1}/{NumGenerations} DONE | Time: {gen_duration:.2f} s')
     
     
-        # For now we reset the parameters afterwards
-        print('Resetting model-parameters to initial values...')
+       
 
 evolution()
 
@@ -166,4 +166,7 @@ def Test():
 
 #Test()
 
+
+ # For now we reset the parameters afterwards
+print('Resetting model-parameters to initial values...')
 changeParameters([4.0,4.0,4.0,4.0,4.0],[[25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15]])
