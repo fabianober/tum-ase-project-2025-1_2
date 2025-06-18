@@ -3,7 +3,10 @@ import os
 
 def run_run_analysis(name):
     #Constants
-    solver_template = "C:/Program Files/Altair/2025/hwdesktop/templates/feoutput/optistruct/optistruct"
+    if name == 'felix':
+        solver_template = "C:/Program Files/Altair/2024.1/hwdesktop/templates/feoutput/optistruct/optistruct"
+    else:
+        solver_template = "C:/Program Files/Altair/2025/hwdesktop/templates/feoutput/optistruct/optistruct"
     #print('RA: Running analysis for:', name)
     file_path = "data/"+ name +"/hmout/input.fem"
     solver_parameters = ["HM_NODEELEMS_SET_COMPRESS_SKIP ", "EXPORT_DMIG_LONGFORMAT ", "HMENGINEERING_XML", "HMSUBSYSTEMCOMMENTS_XML", "HMMATCOMMENTS_XML", "HMBOMCOMMENTS_XML", "INCLUDE_RELATIVE_PATH ", "EXPORT_SOLVER_DECK_XML_1 "]
@@ -21,7 +24,8 @@ def run_run_analysis(name):
     elif name == 'daniel':
         os.system(r'"C:\Program Files\Altair\2023.1\hwsolvers\scripts\optistruct.bat" data/daniel/hmout/input.fem')
     elif name == 'felix':
-        os.system(r'"C:\Program Files\Altair\2023.1\hwsolvers\scripts\optistruct.bat" data/felix/hmout/input.fem')
+        #print("Bin da")
+        os.system(r'"C:\Program Files\Altair\2024.1\hwsolvers\scripts\optistruct.bat" data/felix/hmout/input.fem')
     #else:
         ##print('RA: No valid name provided, cannot run solver')
     #print('RA: cleaning up the hmout folder')
