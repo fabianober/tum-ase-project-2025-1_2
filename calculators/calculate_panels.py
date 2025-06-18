@@ -155,7 +155,8 @@ def calculate_panels(name):
 
     evaluateDf = pd.DataFrame({
         'panel thickness': [thicknesses],
-        'score': [score]
+        'score': [score],
+        'minRF':[evaluateDf['Reserve Factor'].min()]
     })
 
 

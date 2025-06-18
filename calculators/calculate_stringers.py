@@ -225,7 +225,8 @@ def calculate_stringers(name):
 
     evaluateDf = pd.DataFrame({
         'stringer Parameters': [dimensions],
-        'score': [score]
+        'score': [score],
+        'minRF':[evaluateDf['Reserve Factor'].min()]
     })
 
     # ## Output stringer score

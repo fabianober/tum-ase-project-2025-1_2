@@ -38,7 +38,7 @@ def massScoreCalc(name):
         massScore = abs(clearance) * NegweightScaling
     else:
         massScore = (1/clearance) * PosweightScaling
-    return massScore 
+    return total_mass, massScore 
 
 
 
@@ -82,12 +82,16 @@ def combinedScore(name):
         # Import files to compute new score 
         panelScoreDf = pd.read_csv(f'./data/{name}/output/panelScore.csv')
         stringerScoreDf = pd.read_csv(f'./data/{name}/output/stringerScore.csv')
-        massScore = massScoreCalc()
+        total_mass, massScore = massScoreCalc(name)
+        minRF = min(panelScoreDf['panel thickness'][0], stringerScoreDf['stringer Parameters'][0])
         # Concat to one new parameter score entry
         newscoreDf = pd.DataFrame({
             'panel thickness':[panelScoreDf['panel thickness'][0]],
             'stringer Parameters':[stringerScoreDf['stringer Parameters'][0]],
+            'mass':[total_mass],
+            'min RF': [minRF],
             'score':[massScore+panelScoreDf.score[0] + stringerScoreDf.score[0]]
+            
         })
 
         scoreDf=pd.concat([scoreDf, newscoreDf], axis=0)
@@ -97,12 +101,16 @@ def combinedScore(name):
         # Import files to compute new score 
         panelScoreDf = pd.read_csv(f'./data/{name}/output/panelScore.csv')
         stringerScoreDf = pd.read_csv(f'./data/{name}/output/stringerScore.csv')
-        massScore = massScoreCalc()
+        total_mass, massScore = massScoreCalc(name)
+        minRF = min(panelScoreDf['panel thickness'][0], stringerScoreDf['stringer Parameters'][0])
         # Concat to one new parameter score entry
         newscoreDf = pd.DataFrame({
             'panel thickness':[panelScoreDf['panel thickness'][0]],
             'stringer Parameters':[stringerScoreDf['stringer Parameters'][0]],
+            'mass':[total_mass],
+            'min RF': [minRF],
             'score':[massScore+panelScoreDf.score[0] + stringerScoreDf.score[0]]
+            
         })
         newscoreDf.to_csv(f'./data/{name}/output/children.csv', index=False)
     return None 
@@ -111,13 +119,17 @@ def oneScoreDf(name):
     # Import files to compute new score 
     panelScoreDf = pd.read_csv(f'./data/{name}/output/panelScore.csv')
     stringerScoreDf = pd.read_csv(f'./data/{name}/output/stringerScore.csv')
-    massScore = massScoreCalc()
+    total_mass, massScore = massScoreCalc()
+    minRF = min(panelScoreDf['panel thickness'][0], stringerScoreDf['stringer Parameters'][0])
     # Concat to one new parameter score entry
     newscoreDf = pd.DataFrame({
-        'panel thickness':[panelScoreDf['panel thickness'][0]],
-        'stringer Parameters':[stringerScoreDf['stringer Parameters'][0]],
-        'score':[massScore+panelScoreDf.score[0] + stringerScoreDf.score[0]]
-    })
+            'panel thickness':[panelScoreDf['panel thickness'][0]],
+            'stringer Parameters':[stringerScoreDf['stringer Parameters'][0]],
+            'mass':[total_mass],
+            'min RF': [minRF],
+            'score':[massScore+panelScoreDf.score[0] + stringerScoreDf.score[0]]
+            
+        })
     newscoreDf.to_csv(f'./data/{name}/output/generations.csv', index=False)
     return None
 #combinedScore(name='yannis')
