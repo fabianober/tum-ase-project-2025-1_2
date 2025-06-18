@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import os
 
+from formulas.mass import total_mass
+
 # --- Run pipeline ---
 from hmscript.change_properties import changeParameters
 from hmscript.run_analysis import run_get_properties, run_run_analysis
@@ -50,13 +52,15 @@ def fem_evaluate_vector(
     calculate_panels(person)
     calculate_stringers(person)
 
+    #total_mass = total_mass(name=name)
     # Mass (robustly read)
-    mass_file = os.path.join(outdir, "totalMass.txt")
-    if os.path.exists(mass_file):
-        with open(mass_file, "r") as f:
-            mass = float(f.read().strip())
-    else:
-        mass = np.nan #Code didn't find anything nan: "not a number" will throw error for debug
+    #mass_file = os.path.join(outdir, "totalMass.txt")
+    #if os.path.exists(mass_file):
+    #    with open(mass_file, "r") as f:
+    #        mass = float(f.read().strip())
+    #else:
+    #    mass = np.nan #Code didn't find anything nan: "not a number" will throw error for debug
+    mass = total_mass(name=person)
 
     # --- Read PanelRFs.csv ---
     rf_panel = np.array([])
