@@ -28,7 +28,7 @@ import os
 model = hm.Model()
 
 '''Parameters for running the generational algorithm'''
-NumGenerations = 4
+NumGenerations = 2
 NumChildren = 15
 
 
@@ -95,6 +95,14 @@ for i in range(0, NumGenerations):
     panelThick = ast.literal_eval(generationDf['panel thickness'][0])
     StringerDim = ast.literal_eval(generationDf['stringer Parameters'][0])
     for j in range(0, NumChildren):
+
+        # For security, we check if we want to abbort. We read the file every time to ensure we catch any changes.
+        with open("abort.bye", "r") as f:
+            abort = f.read().strip()
+        if abort == "1":
+            print("Aborting the generational algorithm. Bye...")
+            sys.exit()
+
         child_start_time = time.time()
         newpanelThick, newStringerDim = randomizeParameters(panelThickness=panelThick, stringerDims=StringerDim)
         changeParameters(newpanelThick, newStringerDim)

@@ -15,7 +15,7 @@ def run_run_analysis(name):
     
     #print('RA: Running the solver now')
     if name == 'fabian':
-        os.system(r'"C:\Program Files\Altair\2023.1\hwsolvers\scripts\optistruct.bat" data/fabian/hmout/input.fem -cores 6')
+        os.system(r'"C:\Program Files\Altair\2023.1\hwsolvers\scripts\optistruct.bat" data/fabian/hmout/input.fem')
     elif name == 'yannis':
         os.system(r'"C:\Program Files\Altair\2023.1\hwsolvers\scripts\optistruct.bat" data/yannis/hmout/input.fem -cores 4')
     elif name == 'daniel':
