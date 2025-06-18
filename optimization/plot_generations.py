@@ -13,6 +13,10 @@ df = pd.read_csv(
     }
 )
 
+# Sort by GenIndex to ensure correct order
+if 'GenIndex' in df.columns:
+    df = df.sort_values('GenIndex')
+
 gen_idx = df['GenIndex']
 
 fig, axes = plt.subplots(3, 3, figsize=(18, 12))
