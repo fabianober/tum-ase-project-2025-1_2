@@ -17,9 +17,11 @@ def run_run_analysis(name):
     if name == 'fabian':
         os.system(r'"C:\Program Files\Altair\2023.1\hwsolvers\scripts\optistruct.bat" data/fabian/hmout/input.fem')
     elif name == 'yannis':
-        os.system(r'"C:\Program Files\Altair\2023.1\hwsolvers\scripts\optistruct.bat" data/yannis/hmout/input.fem')
+        os.system(r'"C:\Program Files\Altair\2023.1\hwsolvers\scripts\optistruct.bat" data/yannis/hmout/input.fem -cores 4')
     elif name == 'daniel':
         os.system(r'"C:\Program Files\Altair\2023.1\hwsolvers\scripts\optistruct.bat" data/daniel/hmout/input.fem')
+    elif name == 'felix':
+        os.system(r'"C:\Program Files\Altair\2023.1\hwsolvers\scripts\optistruct.bat" data/felix/hmout/input.fem')
     #else:
         ##print('RA: No valid name provided, cannot run solver')
     #print('RA: cleaning up the hmout folder')

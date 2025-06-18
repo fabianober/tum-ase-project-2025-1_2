@@ -2,10 +2,12 @@
 print("Initializing main script...")
 print('-----------------------')
 
+
 import os
 import sys
 import pandas as pd
 import ast
+import time
 
 sys.path.insert(0, os.path.abspath('..'))
 sys.path.insert(0, os.path.abspath('hmscript'))
@@ -21,12 +23,13 @@ from mass import *
 from calculate_panels import *
 from calculate_stringers import *
 from generation import *
+import os
 
 model = hm.Model()
 
 '''Parameters for running the generational algorithm'''
 NumGenerations = 2
-NumChildren = 8
+NumChildren = 15
 
 
 print("Getting your name...")
@@ -72,10 +75,6 @@ print('Running stringers calculator...')
 calculate_stringers(name=name)"""
 
 
-
-
-
-
 # For now create the score of the originial model 
 #run_get_properties(name=name)
 #run_run_analysis(name=name)
@@ -83,14 +82,29 @@ calculate_stringers(name=name)"""
 #calculate_stringers(name=name)
 #oneScoreDf(name=name)
 
-
 # Here the generational algorithm is run 
-for i in range(0,NumGenerations):
+
+
+total_children = NumGenerations * NumChildren
+child_times = []
+children_done = 0
+
+for i in range(0, NumGenerations):
+    gen_start_time = time.time()
     generationDf = pd.read_csv(f'./data/{name}/output/generations.csv')
     panelThick = ast.literal_eval(generationDf['panel thickness'][0])
     StringerDim = ast.literal_eval(generationDf['stringer Parameters'][0])
     for j in range(0, NumChildren):
-        newpanelThick, newStringerDim = randomizeParameters(panelThickness = panelThick, stringerDims = StringerDim)
+
+        # For security, we check if we want to abbort. We read the file every time to ensure we catch any changes.
+        with open("abort.bye", "r") as f:
+            abort = f.read().strip()
+        if abort == "1":
+            print("Aborting the generational algorithm. Bye...")
+            sys.exit()
+
+        child_start_time = time.time()
+        newpanelThick, newStringerDim = randomizeParameters(panelThickness=panelThick, stringerDims=StringerDim)
         changeParameters(newpanelThick, newStringerDim)
         run_get_properties(name=name)
         run_run_analysis(name=name)
@@ -98,16 +112,37 @@ for i in range(0,NumGenerations):
         calculate_stringers(name=name)
         combinedScore(name=name)
         progress = ((i * NumChildren + (j + 1)) / (NumGenerations * NumChildren)) * 100
-        print(f'CHILD NR. {j+1}/{NumChildren} gen{i+1}  DONE -  this is {progress:.1f}%')
+        child_end_time = time.time()
+        child_duration = child_end_time - child_start_time
+        child_times.append(child_duration)
+        children_done += 1
+        # Estimate remaining time
+        avg_child_time = sum(child_times) / len(child_times)
+        children_left = total_children - children_done
+        remaining_time = avg_child_time * children_left
+        rem_h = int(remaining_time // 3600)
+        rem_m = int((remaining_time % 3600) // 60)
+        rem_s = int(remaining_time % 60)
+        print(f'CHILD {j+1}/{NumChildren} gen{i+1}/{NumGenerations} DONE | {progress:.1f}% | Time: {child_duration:.2f} s | Remaining: {rem_h}h {rem_m}m {rem_s}s')
     generationDf = pd.read_csv(f'./data/{name}/output/generations.csv')
     scoreDf = pd.read_csv(f'./data/{name}/output/children.csv')
     min_row = scoreDf.loc[scoreDf['score'].idxmin()]
     min_row = min_row.to_frame().T
-    generationDf=pd.concat([generationDf, min_row], axis=0)
+    generationDf = pd.concat([generationDf, min_row], axis=0)
     generationDf = generationDf.sort_values(by='score', ascending=True).reset_index(drop=True)
     generationDf.to_csv(f'./data/{name}/output/generations.csv', index=False)
-    print(f'GENERATION NR. {i+1}/{NumGenerations}  DONE')
+
+    # Delete the children.csv file to avoid confusion
+    children_file = f'./data/{name}/output/children.csv'
+    if os.path.exists(children_file):
+        os.remove(children_file)
+
+    gen_end_time = time.time()
+    gen_duration = gen_end_time - gen_start_time
+    print(f'GENERATION {i+1}/{NumGenerations} DONE | Time: {gen_duration:.2f} s')
 
 
 # For now we reset the parameters afterwards
+print('Resetting model-parameters to initial values...')
+
 changeParameters([4.0,4.0,4.0,4.0,4.0],[[25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15]])
