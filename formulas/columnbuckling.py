@@ -106,6 +106,7 @@ def sigma_crip(EModulus, DIM1, DIM2, DIM3, sigma_yield, r):
     #We have a HAT-Stringer attached to the skin
     #Support factor for relevant parts of stringer
     ki1 = 3.6
+    ki2 = 0
     if DIM1 - DIM2 > 0.2*DIM3:
        ki2 = 3.6
     else:
