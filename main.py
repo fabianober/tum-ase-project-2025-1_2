@@ -23,6 +23,7 @@ from mass import *
 from calculate_panels import *
 from calculate_stringers import *
 from generation import *
+from ReverseEngineering import *
 
 from run_optimizer_adaptiveV3_6_fin import *
 
@@ -31,7 +32,8 @@ model = hm.Model()
 '''Parameters for running the generational algorithm'''
 NumGenerations = 8
 NumChildren = 30
-
+NumReverse = 1
+RFgoal = 0.9
 
 print("Getting your name...")
 
@@ -91,6 +93,26 @@ def resetAll(name):
     calculate_panels(name=name)
     calculate_stringers(name=name)
 
+    # Now start the iteration:
+    assembleUpdate(name, RFgoal)
+
+
+# Reverse engineering 
+def reverse():
+    # Recalculate current state 
+    run_get_properties(name=name)
+    run_run_analysis(name=name)
+    calculate_panels(name=name)
+    calculate_stringers(name=name)
+
+    for i in range(NumReverse):
+        newThick, newStringerDims = assembleUpdate(name, RFgoal)
+        changeParameters(newThick, newStringerDims)
+        run_run_analysis(name=name)
+        calculate_panels(name=name)
+        calculate_stringers(name=name)
+        addScoreDf(name=name)
+    return None 
 
 def evolution():
     total_children = NumGenerations * NumChildren
@@ -152,9 +174,9 @@ def evolution():
     
     
        
-
+reverse()
 #evolution()
-resetAll(name=name)
+#resetAll(name=name)
 #Run_Optimisation_Ad_V3()
 
 def Test():

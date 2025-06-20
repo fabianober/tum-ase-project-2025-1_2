@@ -35,12 +35,7 @@ def assembleUpdate(name, RFgoal):
                     stringerDimsDf['dim4'][i]+ weightDim4* stringerDimsDf['diff_dim4'][i],
                     ]
             newStringerDims.append(newDims)
-        # Assemble one datFrame to return:
-        updateFrame = pd.DataFrame({
-            'panel thickness': [newPanelThick],
-            'stringer Parameters':[newStringerDims]
-        })
-        return updateFrame
+        return newPanelThick, newStringerDims
     except:
         print('Error occured file not found')
         return None

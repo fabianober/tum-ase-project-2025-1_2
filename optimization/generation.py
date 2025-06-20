@@ -117,6 +117,51 @@ def combinedScore(name, index):
         newscoreDf.to_csv(f'./data/{name}/output/children.csv', index=False)
     return None 
 
+
+def addScore(name):
+    try:
+         #print("Doing the correct thing")
+        scoreDf = pd.read_csv(f'./data/{name}/output/generations.csv')
+        # Import files to compute new score 
+        panelScoreDf = pd.read_csv(f'./data/{name}/output/panelScore.csv')
+        stringerScoreDf = pd.read_csv(f'./data/{name}/output/stringerScore.csv')
+        total_mass, massScore = massScoreCalc(name)
+        minRF = min(panelScoreDf['minRF'][0], stringerScoreDf['minRF'][0])
+        # Concat to one new parameter score entry
+        newscoreDf = pd.DataFrame({
+            'panel thickness':[panelScoreDf['panel thickness'][0]],
+            'stringer Parameters':[stringerScoreDf['stringer Parameters'][0]],
+            'mass':[total_mass],
+            'min RF': [minRF],
+            'GenIndex':[scoreDf['GenIndex'].max()+1],
+            'score':[massScore+panelScoreDf.score[0] + stringerScoreDf.score[0]]
+            
+        })
+
+        scoreDf=pd.concat([scoreDf, newscoreDf], axis=0)
+        scoreDf.to_csv(f'./data/{name}/output/children.csv', index=False)
+
+    except:
+        # Import files to compute new score if no one before existed 
+        panelScoreDf = pd.read_csv(f'./data/{name}/output/panelScore.csv')
+        stringerScoreDf = pd.read_csv(f'./data/{name}/output/stringerScore.csv')
+        total_mass, massScore = massScoreCalc(name)
+        minRF = min(panelScoreDf['minRF'][0], stringerScoreDf['minRF'][0])
+        # Concat to one new parameter score entry
+        newscoreDf = pd.DataFrame({
+                'panel thickness':[panelScoreDf['panel thickness'][0]],
+                'stringer Parameters':[stringerScoreDf['stringer Parameters'][0]],
+                'mass':[total_mass],
+                'min RF': [minRF],
+                'GenIndex':[0],
+                'score':[massScore+panelScoreDf.score[0] + stringerScoreDf.score[0]]
+            
+            })
+        newscoreDf.to_csv(f'./data/{name}/output/generations.csv', index=False)
+    return None
+
+
+
 def oneScoreDf(name, index):
     # Import files to compute new score 
     panelScoreDf = pd.read_csv(f'./data/{name}/output/panelScore.csv')
