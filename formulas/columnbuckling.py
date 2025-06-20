@@ -104,13 +104,19 @@ def EulerBuckling(row, EModulus, c=1):
 #Euler Johnson with Crippling
 def sigma_crip(EModulus, DIM1, DIM2, DIM3, sigma_yield, r):
     #We have a HAT-Stringer attached to the skin
-    ki = 3.6   #Support factor for relevant parts of stringer
+    #Support factor for relevant parts of stringer
+    ki1 = 3.6
+    ki2 = 0
+    if DIM1 - DIM2 > 0.2*DIM3:
+       ki2 = 3.6
+    else:
+       ki2 = 0.41
     #Effective width of crippling-affected parts of the HAT-stringer 
     b1 = DIM1 - DIM2/2*(1 - 0.2*(r**2/DIM2**2))
     b2 = DIM3 - DIM2*(1 - 0.2*(r**2/DIM2**2))
     #slenderness of the crippling-affected parts of the HAT-stringer
-    x1 = b1/DIM2 * math.sqrt(sigma_yield/(ki*EModulus))
-    x2 = b2/DIM2 * math.sqrt(sigma_yield/(ki*EModulus))
+    x1 = b1/DIM2 * math.sqrt(sigma_yield/(ki1*EModulus))
+    x2 = b2/DIM2 * math.sqrt(sigma_yield/(ki2*EModulus))
     #Compute the scaling factors alpha 1 & alpha 2
     alpha1 = 0
     if 0.4 <= x1 <= 1.095:
