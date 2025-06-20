@@ -189,7 +189,7 @@ def calculate_panels(name):
     #outputDf = outputDf.round(rounding_digits)
     outputDf.to_csv(os.path.join(BASE_DIR, f'../data/{name}/output/processed_e.csv'))
     updateParametersDf = updateParametersDf.round(rounding_digits)
-    updateParametersDf.to_csv(os.path.join(BASE_DIR, f'../data/{name}/output/update_e.csv'))
+    updateParametersDf.to_csv(os.path.join(BASE_DIR, f'../data/{name}/output/updatePanelThick.csv'))
 
     #print(f"CP: Successfully calculated panels for {name} and saved the results to the data folder.")
 
