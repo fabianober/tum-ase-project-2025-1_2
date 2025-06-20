@@ -237,38 +237,40 @@ def calculate_stringers(name):
 
 
 
-    # # Reverse Engineering part 
-    updateDF[['new_dim1', 'new_dim3', 'new_dim4']] = updateDF.apply(reverseAllDims, EModulus=EModulus,
-                                                                    stringerPitch=stringer_pitch,
-                                                                    length=stringer_element_length*3,
-                                                                    RFgoal=0.9, axis=1, result_type='expand')
-    updateDF = updateDF.drop(['Volume' ,'thickness' , 'sigma_XX_avg', 'I_yy',  'areaTot', 'VolumeTot', 'sigma_crip', 'lambda_crit', 'lambda', 'r_gyr', 'sigma_crit'], axis =1)
-    # ##Keep only essential data 
-    updateDF = updateDF.groupby('stiffener').agg({
-    'dim1': 'max',
-    'dim2': 'max',
-    'dim3': 'max',
-    'dim4': 'max',
-    'new_dim1': 'max',
-    'new_dim3': 'max',
-    'new_dim4': 'max'
-    })
+    # # Reverse Engineering part
+    def reverseEngineer(RFgoal):
+        updateDF[['new_dim1', 'new_dim3', 'new_dim4']] = updateDF.apply(reverseAllDims, EModulus=EModulus,
+                                                                        stringerPitch=stringer_pitch,
+                                                                        length=stringer_element_length*3,
+                                                                        RFgoal=RFgoal, axis=1, result_type='expand')
+        updateDF = updateDF.drop(['Volume' ,'thickness' , 'sigma_XX_avg', 'I_yy',  'areaTot', 'VolumeTot', 'sigma_crip', 'lambda_crit', 'lambda', 'r_gyr', 'sigma_crit'], axis =1)
+        # ##Keep only essential data 
+        updateDF = updateDF.groupby('stiffener').agg({
+        'dim1': 'max',
+        'dim2': 'max',
+        'dim3': 'max',
+        'dim4': 'max',
+        'new_dim1': 'max',
+        'new_dim3': 'max',
+        'new_dim4': 'max'
+        })
 
 
-    # ## Add differnces of the Stringer 
-    updateDF['diff_dim1'] = (updateDF['new_dim1'] - updateDF['dim1']).astype(float)
-    updateDF['diff_dim3'] = (updateDF['new_dim3'] - updateDF['dim3']). astype(float)
-    updateDF['diff_dim4'] = (updateDF['new_dim4'] - updateDF['dim4']).astype(float)
+        # ## Add differnces of the Stringer 
+        updateDF['diff_dim1'] = (updateDF['new_dim1'] - updateDF['dim1']).astype(float)
+        updateDF['diff_dim3'] = (updateDF['new_dim3'] - updateDF['dim3']). astype(float)
+        updateDF['diff_dim4'] = (updateDF['new_dim4'] - updateDF['dim4']).astype(float)
 
-    #Convert type 
-    updateDF['new_dim1'] = updateDF['new_dim1'].astype(float)
-    updateDF['new_dim3'] = updateDF['new_dim3'].astype(float)
-    updateDF['new_dim4'] = updateDF['new_dim4'].astype(float)
+        #Convert type 
+        updateDF['new_dim1'] = updateDF['new_dim1'].astype(float)
+        updateDF['new_dim3'] = updateDF['new_dim3'].astype(float)
+        updateDF['new_dim4'] = updateDF['new_dim4'].astype(float)
 
 
-    updateDF = updateDF.round(rounding_digits)
-    # ##Output Stringer Reverse  
-    updateDF.to_csv(f'../data/{name}/output/newStringerDims.csv', index=False)
+        updateDF = updateDF.round(rounding_digits)
+        # ##Output Stringer Reverse  
+        updateDF.to_csv(f'../data/{name}/output/newStringerDims.csv', index=False)
+        return None
     
     
 
