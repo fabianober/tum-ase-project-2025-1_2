@@ -13,15 +13,14 @@ from columnBuckReverse import *
 def assembleUpdate(name):
     try:
         # Get the new panel dimensions
-        panelThickPd = pd.read_csv(f'./data/{name}/output/updatePanelThick.csv')
+        panelThickDf = pd.read_csv(f'./data/{name}/output/updatePanelThick.csv')
         newPanelThick = []
         for i in range(1,6):
-            newPanelThick.append(panelThickPd['thickness'][i])
+            newPanelThick.append(panelThickDf['thickness'][i])
         
 
         #Get the new stringer dimensions
-        
-
+        stringerDimsDf = pd.read_csv(f'./data/{name}/output/newStringerDims.csv')
         # Assemble one datFrame to return:
         updateFrame = pd.DataFrame({
             'panel thickness': [newPanelThick]

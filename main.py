@@ -84,6 +84,13 @@ calculate_stringers(name=name)"""
 #oneScoreDf(name=name, index=0)
 
 # Here the generational algorithm is run 
+def resetAll(name):
+    changeParameters([4.0,4.0,4.0,4.0,4.0],[[25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15]])
+    run_get_properties(name=name)
+    run_run_analysis(name=name)
+    calculate_panels(name=name)
+    calculate_stringers(name=name)
+
 
 def evolution():
     total_children = NumGenerations * NumChildren
@@ -147,8 +154,8 @@ def evolution():
        
 
 #evolution()
-
-Run_Optimisation_Ad_V3()
+resetAll(name=name)
+#Run_Optimisation_Ad_V3()
 
 def Test():
     print("starting test")

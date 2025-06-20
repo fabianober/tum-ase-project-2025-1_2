@@ -183,16 +183,16 @@ def reverseAllDims(row, EModulus, stringerPitch, length, RFgoal):
     new_dim1 = reverseColumn_Euler_DIM1(RF_goal=RFgoal , DIM01=row['dim1'], DIM02=row['dim2'], DIM03=row['dim3'], 
                                         DIM04=row['dim4'], stringer_pitch_in=stringerPitch, thickness_skin_in=row['thickness'],
                                          length=length, c=1, EModulus=EModulus, sigma_applied=row['sigma_XX_avg'])
-    new_dim2 = reverseColumn_Euler_DIM2(RF_goal=RFgoal , DIM01=row['dim1'], DIM02=row['dim2'], DIM03=row['dim3'], 
+    '''new_dim2 = reverseColumn_Euler_DIM2(RF_goal=RFgoal , DIM01=row['dim1'], DIM02=row['dim2'], DIM03=row['dim3'], 
                                        DIM04=row['dim4'], stringer_pitch_in=stringerPitch, thickness_skin_in=row['thickness'],
-                                         length=length, c=1, EModulus=EModulus, sigma_applied=row['sigma_XX_avg'])
+                                         length=length, c=1, EModulus=EModulus, sigma_applied=row['sigma_XX_avg'])'''
     new_dim3 = reverseColumn_Euler_DIM3(RF_goal=RFgoal , DIM01=row['dim1'], DIM02=row['dim2'], DIM03=row['dim3'], 
                                        DIM04=row['dim4'], stringer_pitch_in=stringerPitch, thickness_skin_in=row['thickness'],
                                          length=length, c=1, EModulus=EModulus, sigma_applied=row['sigma_XX_avg'])
-    '''new_dim4 =  reverseColumn_Euler_DIM4(RF_goal=RFgoal , DIM01=row['dim1'], DIM02=row['dim2'], DIM03=row['dim3'], 
+    new_dim4 =  reverseColumn_Euler_DIM4(RF_goal=RFgoal , DIM01=row['dim1'], DIM02=row['dim2'], DIM03=row['dim3'], 
                                        DIM04=row['dim4'], stringer_pitch_in=stringerPitch, thickness_skin_in=row['thickness'],
-                                         length=length, c=1, EModulus=EModulus, sigma_applied=row['sigma_XX_avg'])'''
-    return new_dim1, new_dim2, new_dim3 #,new_dim4
+                                         length=length, c=1, EModulus=EModulus, sigma_applied=row['sigma_XX_avg'])
+    return new_dim1, new_dim3 , new_dim4
 
 
 #testcase for column buckling reverse engineering
