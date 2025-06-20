@@ -90,11 +90,10 @@ def resetAll(name):
     changeParameters([4.0,4.0,4.0,4.0,4.0],[[25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15]])
     run_get_properties(name=name)
     run_run_analysis(name=name)
+    run_get_stresses(name=name)
     calculate_panels(name=name)
     calculate_stringers(name=name)
 
-    # Now start the iteration:
-    assembleUpdate(name, RFgoal)
 
 
 # Reverse engineering 
@@ -102,16 +101,21 @@ def reverse():
     # Recalculate current state 
     run_get_properties(name=name)
     run_run_analysis(name=name)
+    run_get_stresses(name=name)
     calculate_panels(name=name)
-    calculate_stringers(name=name)
+    calculate_stringers(name=name, RFgoal=RFgoal)
 
     for i in range(NumReverse):
-        newThick, newStringerDims = assembleUpdate(name, RFgoal)
+        print(i)
+        newThick, newStringerDims = assembleUpdate(name)
+        print(newThick)
         changeParameters(newThick, newStringerDims)
+        run_get_properties(name=name)
         run_run_analysis(name=name)
+        run_get_stresses(name=name)
         calculate_panels(name=name)
-        calculate_stringers(name=name)
-        addScoreDf(name=name)
+        calculate_stringers(name=name, RFgoal=RFgoal)
+        addScore(name=name)
     return None 
 
 def evolution():
@@ -139,6 +143,7 @@ def evolution():
             changeParameters(newpanelThick, newStringerDim)
             run_get_properties(name=name)
             run_run_analysis(name=name)
+            run_get_stresses(name=name)
             calculate_panels(name=name)
             calculate_stringers(name=name)
             combinedScore(name=name, index=currentIndex+i+1)

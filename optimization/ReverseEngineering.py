@@ -5,18 +5,18 @@ import pandas as pd
 # Join paths for own modules 
 sys.path.insert(0, os.path.abspath('..')) 
 sys.path.insert(0, os.path.abspath('formulas'))
+sys.path.insert(0, os.path.abspath('calculators'))
 
 from panelBuckReverse import *
 from columnBuckReverse import *
-from calculators.calculate_stringers import*
+
 
 # weigthing factors for dim1, dim3, dim4
 weightDim1 = 0.699
 weightDim3 = 0.3 
 weightDim4 = 0.001
 
-def assembleUpdate(name, RFgoal):
-    reverseEngineer(RFgoal)
+def assembleUpdate(name):
     try:
         # Get the new panel dimensions
         panelThickDf = pd.read_csv(f'./data/{name}/output/updatePanelThick.csv')

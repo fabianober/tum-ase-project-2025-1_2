@@ -118,9 +118,10 @@ def combinedScore(name, index):
     return None 
 
 
+# Adds the scores of the reverse Engineering part 
 def addScore(name):
     try:
-         #print("Doing the correct thing")
+        #print("Doing the correct thing")
         scoreDf = pd.read_csv(f'./data/{name}/output/generations.csv')
         # Import files to compute new score 
         panelScoreDf = pd.read_csv(f'./data/{name}/output/panelScore.csv')
@@ -139,7 +140,9 @@ def addScore(name):
         })
 
         scoreDf=pd.concat([scoreDf, newscoreDf], axis=0)
-        scoreDf.to_csv(f'./data/{name}/output/children.csv', index=False)
+        scoreDf = scoreDf.sort_values(by='score', ascending=True).reset_index(drop=True)
+        scoreDf.to_csv(f'./data/{name}/output/generations.csv', index=False)
+        
 
     except:
         # Import files to compute new score if no one before existed 
@@ -159,6 +162,8 @@ def addScore(name):
             })
         newscoreDf.to_csv(f'./data/{name}/output/generations.csv', index=False)
     return None
+
+
 
 
 

@@ -12,9 +12,13 @@ from formulas.helpers import *
 from optimization.generation import *
 from optimization.columnBuckReverse import *
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-def calculate_stringers(name):
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# # Reverse Engineering part
+
+
+def calculate_stringers(name, RFgoal=1):
     rounding_digits = 3
 
     # ## Constants
@@ -214,6 +218,8 @@ def calculate_stringers(name):
     evaluateDf = evaluateDf.reset_index()
     evaluateDf = evaluateDf.drop(['index'], axis=1)
     updateDF = evaluateDf.copy()
+    
+
 
     evaluateDf = evaluateDf.drop(['Volume' ,'thickness' , 'sigma_XX_avg', 'I_yy',  'areaTot', 'VolumeTot', 'sigma_crip', 'lambda_crit', 'lambda', 'r_gyr', 'sigma_crit'], axis =1)
 
@@ -233,46 +239,40 @@ def calculate_stringers(name):
 
     # ## Output stringer score
     evaluateDf.to_csv(os.path.join(BASE_DIR, f'../data/{name}/output/stringerScore.csv'), index=False)
-
-
-
-
-    # # Reverse Engineering part
-    def reverseEngineer(RFgoal):
-        updateDF[['new_dim1', 'new_dim3', 'new_dim4']] = updateDF.apply(reverseAllDims, EModulus=EModulus,
-                                                                        stringerPitch=stringer_pitch,
-                                                                        length=stringer_element_length*3,
-                                                                        RFgoal=RFgoal, axis=1, result_type='expand')
-        updateDF = updateDF.drop(['Volume' ,'thickness' , 'sigma_XX_avg', 'I_yy',  'areaTot', 'VolumeTot', 'sigma_crip', 'lambda_crit', 'lambda', 'r_gyr', 'sigma_crit'], axis =1)
-        # ##Keep only essential data 
-        updateDF = updateDF.groupby('stiffener').agg({
-        'dim1': 'max',
-        'dim2': 'max',
-        'dim3': 'max',
-        'dim4': 'max',
-        'new_dim1': 'max',
-        'new_dim3': 'max',
-        'new_dim4': 'max'
-        })
-
-
-        # ## Add differnces of the Stringer 
-        updateDF['diff_dim1'] = (updateDF['new_dim1'] - updateDF['dim1']).astype(float)
-        updateDF['diff_dim3'] = (updateDF['new_dim3'] - updateDF['dim3']). astype(float)
-        updateDF['diff_dim4'] = (updateDF['new_dim4'] - updateDF['dim4']).astype(float)
-
-        #Convert type 
-        updateDF['new_dim1'] = updateDF['new_dim1'].astype(float)
-        updateDF['new_dim3'] = updateDF['new_dim3'].astype(float)
-        updateDF['new_dim4'] = updateDF['new_dim4'].astype(float)
-
-
-        updateDF = updateDF.round(rounding_digits)
-        # ##Output Stringer Reverse  
-        updateDF.to_csv(f'../data/{name}/output/newStringerDims.csv', index=False)
-        return None
     
     
+    # # Reverse Engineering
+    updateDF[['new_dim1', 'new_dim3', 'new_dim4']] = updateDF.apply(reverseAllDims, EModulus=EModulus,
+                                                                    stringerPitch=stringer_pitch,
+                                                                    length=stringer_element_length*3,
+                                                                    RFgoal=RFgoal, axis=1, result_type='expand')
+    updateDF = updateDF.drop(['Volume' ,'thickness' , 'sigma_XX_avg', 'I_yy',  'areaTot', 'VolumeTot', 'sigma_crip', 'lambda_crit', 'lambda', 'r_gyr', 'sigma_crit'], axis =1)
+    # ##Keep only essential data 
+    updateDF = updateDF.groupby('Stiffener').agg({
+    'dim1': 'max',
+    'dim2': 'max',
+    'dim3': 'max',
+    'dim4': 'max',
+    'new_dim1': 'max',
+    'new_dim3': 'max',
+    'new_dim4': 'max'
+    })
+
+
+    # ## Add differnces of the Stringer 
+    updateDF['diff_dim1'] = (updateDF['new_dim1'] - updateDF['dim1']).astype(float)
+    updateDF['diff_dim3'] = (updateDF['new_dim3'] - updateDF['dim3']). astype(float)
+    updateDF['diff_dim4'] = (updateDF['new_dim4'] - updateDF['dim4']).astype(float)
+
+    #Convert type 
+    updateDF['new_dim1'] = updateDF['new_dim1'].astype(float)
+    updateDF['new_dim3'] = updateDF['new_dim3'].astype(float)
+    updateDF['new_dim4'] = updateDF['new_dim4'].astype(float)
+
+
+    updateDF = updateDF.round(rounding_digits)
+    # ##Output Stringer Reverse  
+    updateDF.to_csv(os.path.join(BASE_DIR, f'../data/{name}/output/newStringerDims.csv'), index=False)
 
     # # Cleanup data for output 
     # ## Drop unenessacry columns 
@@ -304,4 +304,4 @@ def calculate_stringers(name):
     #print("CS: Stringer calculations completed successfully.")
 
 if __name__ == "__main__":
-    calculate_stringers('fabian')
+    calculate_stringers('yannis')
