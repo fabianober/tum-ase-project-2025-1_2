@@ -5,12 +5,14 @@ def total_mass(name):
     base_dir = os.path.dirname(os.path.abspath(__file__))
     csv_path = os.path.join(base_dir, '..', 'data', name, 'properties', 'element_masses.csv')
     total_mass = 0.0
+    exclude_elements = {'31', '32', '33', '34', '35', '36'}
     with open(csv_path, newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            total_mass += float(row['mass'])
+            if row.get('elements') not in exclude_elements:
+                total_mass += float(row['mass'])
     return total_mass * 1000  # Convert tonns to kg
 
 if __name__ == "__main__":
-    mass = total_mass('fabian')
+    mass = total_mass('yannis')
     print(f"Total mass: {mass}")

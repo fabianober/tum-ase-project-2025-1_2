@@ -15,8 +15,8 @@ from helpers import *
 
 # Parameters for the optimization 
 rfPosScaling = 100
-rfNegScaling = 400
-NegweightScaling = 1000
+rfNegScaling = 500
+NegweightScaling = 800
 PosweightScaling = 50
 RF_goal = 1.03
 
@@ -24,9 +24,9 @@ RF_goal = 1.03
 # Assign the RF a score 
 def rf_score(row):
     if row['Reserve Factor'] < 1:
-        score = rfNegScaling * abs(row['Reserve Factor'] -RF_goal)
+        score = pow(rfNegScaling * abs(row['Reserve Factor'] -RF_goal), 2)
     else: 
-        score = rfPosScaling * abs(row['Reserve Factor'] -RF_goal)
+        score = pow(rfPosScaling * abs(row['Reserve Factor'] -RF_goal), 2)
     return score
 
 # mass score 
@@ -35,9 +35,9 @@ def massScoreCalc(name):
     tot_mass = total_mass(name=name)
     clearance = maxMass-tot_mass
     if clearance <= 0:
-        massScore = abs(clearance) * NegweightScaling
+        massScore = pow(abs(clearance) * NegweightScaling, 2)
     else:
-        massScore = (1/clearance) * PosweightScaling
+        massScore = pow((1/clearance) * PosweightScaling, 2)
     return tot_mass, massScore 
 
 
