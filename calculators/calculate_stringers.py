@@ -10,6 +10,7 @@ from formulas.columnbuckling import *
 from formulas.panels import *
 from formulas.helpers import *
 from optimization.generation import *
+from optimization.columnBuckReverse import *
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -212,6 +213,7 @@ def calculate_stringers(name):
     evaluateDf = pd.concat([lc1combined, lc2combined, lc3combined])
     evaluateDf = evaluateDf.reset_index()
     evaluateDf = evaluateDf.drop(['index'], axis=1)
+    updateDF = evaluateDf.copy()
 
     evaluateDf = evaluateDf.drop(['Volume' ,'thickness' , 'sigma_XX_avg', 'I_yy',  'areaTot', 'VolumeTot', 'sigma_crip', 'lambda_crit', 'lambda', 'r_gyr', 'sigma_crit'], axis =1)
 
@@ -231,6 +233,31 @@ def calculate_stringers(name):
 
     # ## Output stringer score
     evaluateDf.to_csv(os.path.join(BASE_DIR, f'../data/{name}/output/stringerScore.csv'), index=False)
+
+
+
+
+    # # Reverse Engineering part 
+    updateDF[['new_dim1', 'new_dim2', 'new_dim3']] = updateDF.apply(reverseAllDims, EModulus=EModulus,
+                                                                    stringerPitch=stringer_pitch,
+                                                                    length=stringer_element_length*3,
+                                                                    RFgoal=0.9, axis=1, result_type='expand')
+    updateDF = updateDF.drop(['Volume' ,'thickness' , 'sigma_XX_avg', 'I_yy',  'areaTot', 'VolumeTot', 'sigma_crip', 'lambda_crit', 'lambda', 'r_gyr', 'sigma_crit'], axis =1)
+    # ##Keep only essential data 
+    updateDF = updateDF.groupby('stiffener').agg({
+    'dim1': 'max',
+    'dim2': 'max',
+    'dim3': 'max',
+    'dim4': 'max',
+    'new_dim1': 'max',
+    'new_dim2': 'max',
+    'new_dim3': 'max',
+    'new_dim4': 'max'
+    })
+    # ##Output Stringer Reverse  
+    updateDF.to_csv(f'../data/{name}/output/newStringerDims.csv', index=False)
+    
+    
 
     # # Cleanup data for output 
     # ## Drop unenessacry columns 
