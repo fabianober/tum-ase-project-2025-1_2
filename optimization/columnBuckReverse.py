@@ -2,11 +2,12 @@ import math
 import sympy
 
 #Reverse engineering of DIM1 for Euler buckling for DIM2, DIM3, DIM4 and thickness_skin unchanged
-#Test case for stringer loadcase with RF=0.4 (one iteration)
+#Test case for stringer loadcase with RF=0.4 (one iteration/all results are counterchecked and valid)
 #DIM1: 25 -> 29.9597
 #DIM2: 2 -> 19.988
 #DIM3: 20 -> 42.5966
-#thickness_skin(two solutions depending on solver setting): 4 -> 22.9725 (current setting)/1.6 
+#DIM4: checked once for testing, but results would blow up way too much
+#thickness_skin(two solutions depending on solver setting): 4 -> 22.9725 (current setting)/1.6 (actually possible, but would make panel buckling worse) 
 
 def reverseColumn_Euler_DIM1(RF_goal, DIM01, DIM02, DIM03, DIM04, stringer_pitch_in, thickness_skin_in, length, c, EModulus, sigma_applied):
     sigma_crit = RF_goal*sigma_applied
