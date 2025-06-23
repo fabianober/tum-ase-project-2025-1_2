@@ -33,9 +33,9 @@ from run_optimizer_adaptiveV3_6_fin import *
 model = hm.Model()
 
 '''Parameters for running the generational algorithm'''
-NumGenerations = 2
-NumChildren = 10
-NumReverse = 2
+NumGenerations = 5
+NumChildren = 5
+NumReverse = 1 # beacuse we found out, nothing changes after the first reverse iteration
 RFgoal = 0.9
 
 # get the rounding_digits from the ini file
@@ -185,6 +185,11 @@ def evolution():
     print(f"Your best stringer dimensions: {bestStringerDim}")
     print("Setting the model to these values...")
     changeParameters(bestPanelThick, bestStringerDim)
+    run_get_properties(name=name)
+    run_run_analysis(name=name)
+    run_get_stresses(name=name)
+    calculate_panels(name=name)
+    calculate_stringers(name=name)
     print(f"Your current model mass is: {round(generationDf['mass'][0], 3)} kg whilst your limit mass is {personal_data_provider(name=name)[3]} kg")
     
        
