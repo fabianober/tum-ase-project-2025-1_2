@@ -156,7 +156,7 @@ def evolution():
             rem_m = int((remaining_time % 3600) // 60)
             rem_s = int(remaining_time % 60)
             print(f'CHILD {j+1}/{NumChildren} gen{i+1}/{NumGenerations} DONE | {progress:.1f}% | Time: {child_duration:.2f} s | Remaining: {rem_h}h {rem_m}m {rem_s}s')
-            reverse(RFgoal_in=0.9)  # Call reverse with the current RFgoal
+           
         generationDf = pd.read_csv(f'./data/{name}/output/generations.csv')
         scoreDf = pd.read_csv(f'./data/{name}/output/children.csv')
         min_row = scoreDf.loc[scoreDf['score'].idxmin()]
@@ -173,17 +173,18 @@ def evolution():
         gen_end_time = time.time()
         gen_duration = gen_end_time - gen_start_time
         print(f'GENERATION {i+1}/{NumGenerations} DONE | Time: {gen_duration:.2f} s')
+        reverse(RFgoal_in=0.9)  # Call reverse with the current RFgoal
         
-        print("We now take your best results and set the properties in the model to those values")
-        bestPanelThick = ast.literal_eval(generationDf['panel thickness'][0])
-        bestStringerDim = ast.literal_eval(generationDf['stringer Parameters'][0])
-        bestPanelThick = np.round(bestPanelThick, rounding_digits)
-        bestStringerDim = np.round(bestStringerDim, rounding_digits)
-        print(f"Your best panel thickness: {bestPanelThick}")
-        print(f"Your best stringer dimensions: {bestStringerDim}")
-        print("Setting the model to these values...")
-        changeParameters(bestPanelThick, bestStringerDim)
-        print(f"Your current model mass is: {round(generationDf['mass'][0], 3)} kg whilst your limit mass is {personal_data_provider(name=name)[3]} kg")
+    print("We now take your best results and set the properties in the model to those values")
+    bestPanelThick = ast.literal_eval(generationDf['panel thickness'][0])
+    bestStringerDim = ast.literal_eval(generationDf['stringer Parameters'][0])
+    bestPanelThick = np.round(bestPanelThick, rounding_digits)
+    bestStringerDim = np.round(bestStringerDim, rounding_digits)
+    print(f"Your best panel thickness: {bestPanelThick}")
+    print(f"Your best stringer dimensions: {bestStringerDim}")
+    print("Setting the model to these values...")
+    changeParameters(bestPanelThick, bestStringerDim)
+    print(f"Your current model mass is: {round(generationDf['mass'][0], 3)} kg whilst your limit mass is {personal_data_provider(name=name)[3]} kg")
     
        
 #reverse()
