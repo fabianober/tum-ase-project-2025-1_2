@@ -78,8 +78,11 @@ def parse_panels(section, subcase_label):
 
 def run_get_stresses(name):
     # Read the .strs file
-    with open(f"data/{name}/hmout/input.strs", "r") as file:
-        content = file.read()
+    try:
+        with open(f"data/{name}/hmout/input.strs", "r") as file:
+            content = file.read()
+    except:
+        print(f"Error: The file 'data/{name}/hmout/input.strs' does not exist or cannot be read.")
 
     stringer_all = []
     panel_all = []

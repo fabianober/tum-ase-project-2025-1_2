@@ -15,7 +15,7 @@ def changePanelThickness(panelThickness):
             param.valuedouble = panelThickness[1]
         elif param.name =='panelT3' :
             param.valuedouble = panelThickness[2]
-        elif param.name == 'panelT4' or param.name == 'Shell7':
+        elif param.name == 'panelT4':
             param.valuedouble = panelThickness[3]
         elif param.name == 'panelT5':
             param.valuedouble = panelThickness[4]
