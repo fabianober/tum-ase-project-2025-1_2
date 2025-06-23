@@ -102,22 +102,21 @@ def updateStringerOffset():
     # Now we apply this offset 
     for element in stringerElements:
         if element.component.name == 'stringer1' or element.component.name == 'stringer9':
-            element.OFFSETA = [0,0, stringerOffset[0]]
-            element.OFFSETB = [0,0, stringerOffset[0]] 
+            element.offsetaz = stringerOffset[0]
+            element.offsetbz = stringerOffset[0] 
         elif element.component.name == 'stringer2' or element.component.name == 'stringer8':
-            element.OFFSETA = [0,0, stringerOffset[1]]
-            element.OFFSETB = [0,0, stringerOffset[1]] 
+            element.offsetaz = stringerOffset[1]
+            element.offsetbz = stringerOffset[1]
         elif element.component.name == 'stringer3' or element.component.name == 'stringer7':
-            element.OFFSETA = [0,0, stringerOffset[2]]
-            element.OFFSETB = [0,0, stringerOffset[2]] 
+            element.offsetaz = stringerOffset[2]
+            element.offsetbz = stringerOffset[2]
         elif element.component.name == 'stringer4' or element.component.name == 'stringer6':
-            element.OFFSETA = [0,0, stringerOffset[3]]
-            element.OFFSETB = [0,0, stringerOffset[3]] 
+            element.offsetaz = stringerOffset[3]
+            element.offsetbz = stringerOffset[3] 
         elif element.component.name == 'stringer5' :
-            element.OFFSETA = [0,0, stringerOffset[4]]
-            element.OFFSETB = [0,0, stringerOffset[4]] 
+            element.offsetaz = stringerOffset[4]
+            element.offsetbz = stringerOffset[4] 
     return None 
-
 
 
 def changeParameters(skinTickness, stringerDim):
@@ -125,7 +124,3 @@ def changeParameters(skinTickness, stringerDim):
     changeStringerDimensions(stringerDim)  #update stringer dimensions (list within list, (Dim1: height, Dim2; thickness, Dim3: "head" width, Dim4: length of Omega 'legs'))
     updatePanelOffset(skinTickness)
     updateStringerOffset()
-
-
-
-

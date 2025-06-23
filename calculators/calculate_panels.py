@@ -19,7 +19,7 @@ from optimization.generation import *
  
 rounding_digits = 3
 
-def calculate_panels(name):
+def calculate_panels(name, RFgoal=1):
     # # Constants (Changed based on your data)
     personal_data = personal_data_provider(name)
     sigma_yield = personal_data[0]
@@ -126,7 +126,7 @@ def calculate_panels(name):
 
     # ## Now we have to apply our reverse engineering and compute the thicknesses
 
-    updateParametersDf["thickness"] = updateParametersDf.apply(panelBuckReverse,EModulus=EModulus, nu=nu, axis=1)
+    updateParametersDf["thickness"] = updateParametersDf.apply(panelBuckReverse,EModulus=EModulus, nu=nu,RF_goal=RFgoal, axis=1)
 
 
     #Drop irrelevant columns

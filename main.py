@@ -8,6 +8,9 @@ import sys
 import pandas as pd
 import ast
 import time
+import numpy as np
+# config parser
+import configparser
 
 sys.path.insert(0, os.path.abspath('..'))
 sys.path.insert(0, os.path.abspath('hmscript'))
@@ -30,10 +33,15 @@ from run_optimizer_adaptiveV3_6_fin import *
 model = hm.Model()
 
 '''Parameters for running the generational algorithm'''
-NumGenerations = 8
-NumChildren = 30
-NumReverse = 1
+NumGenerations = 2
+NumChildren = 3
+NumReverse = 5
 RFgoal = 0.9
+
+# get the rounding_digits from the ini file
+config = configparser.ConfigParser()
+config.read('./config.ini')
+rounding_digits = int(config['DEFAULT']['rounding_digits'])
 
 print("Getting your name...")
 
@@ -41,42 +49,6 @@ with open("name.txt", "r") as f:
     name = f.read().strip()
 
 print(f"Your name is: {name}")
-
-
-# Uncomment if needed 
-
-"""# run get_properties
-print('-----------------------')
-print('Running get_properties...')
-run_get_properties(name=name)
-
-# run analysis and clean up
-print('-----------------------')
-print('Running run_run_analysis...')
-run_run_analysis(name=name)
-
-
-# get stresses
-print('-----------------------')
-print('Running run_run_analysis...')
-run_get_stresses(name=name)
-
-# run our scripts
-print('-----------------------')
-print('We have successfully run the hm analysis and can now run the calculators')
-print('Running mass calculator...')
-total_mass = total_mass(name=name)
-print(f"Total mass of the structure: {total_mass} kg")
-
-print('-----------------------')
-print('Running panels calculator...')
-calculate_panels(name=name)
-
-
-print('-----------------------')
-print('Running stringers calculator...')
-calculate_stringers(name=name)"""
-
 
 # For now create the score of the originial model 
 #run_get_properties(name=name)
@@ -97,28 +69,52 @@ def resetAll(name):
 
 
 # Reverse engineering 
-def reverse():
+def reverse(RFgoal_in):
     # Recalculate current state 
     run_get_properties(name=name)
     run_run_analysis(name=name)
     run_get_stresses(name=name)
-    calculate_panels(name=name)
-    calculate_stringers(name=name, RFgoal=RFgoal)
+    calculate_panels(name=name, RFgoal=RFgoal_in)
+    calculate_stringers(name=name, RFgoal=RFgoal_in)
 
     for i in range(NumReverse):
-        print(i)
+
+        # For security, we check if we want to abbort. We read the file every time to ensure we catch any changes.
+        with open("abort.bye", "r") as f:
+            abort = f.read().strip()
+        if abort == "1":
+            print("Aborting the reverse algorithm. Bye...")
+            sys.exit()
+
+        print(f"Reverse iteration {i+1}/{NumReverse} with RFgoal: {RFgoal_in}")
         newThick, newStringerDims = assembleUpdate(name)
-        print(newThick)
+        #print(newThick)
         changeParameters(newThick, newStringerDims)
         run_get_properties(name=name)
         run_run_analysis(name=name)
         run_get_stresses(name=name)
-        calculate_panels(name=name)
-        calculate_stringers(name=name, RFgoal=RFgoal)
+        calculate_panels(name=name, RFgoal=RFgoal_in)
+        calculate_stringers(name=name, RFgoal=RFgoal_in)
         addScore(name=name)
     return None 
 
 def evolution():
+
+    # call reverse() here with RF_goal from 0.9 onwards
+
+    try:
+        generationDf = pd.read_csv(f'./data/{name}/output/generations.csv')
+        bestPanelThickBefore = ast.literal_eval(generationDf['panel thickness'][0])
+        bestStringerDimBefore = ast.literal_eval(generationDf['stringer Parameters'][0])
+    except:
+        bestPanelThickBefore = [4.0, 4.0, 4.0, 4.0, 4.0]
+        bestStringerDimBefore = [[25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15]]
+
+    for i in range(0, 4): # we have to set the range to 11 because we want to run it from 0.9 to 1.0
+        RFgoal = 0.9 + i * 0.03
+        changeParameters(bestPanelThickBefore, bestStringerDimBefore)  # Set the initial parameters before starting the evolution
+        reverse(RFgoal_in=RFgoal)
+
     total_children = NumGenerations * NumChildren
     child_times = []
     children_done = 0
@@ -160,6 +156,7 @@ def evolution():
             rem_m = int((remaining_time % 3600) // 60)
             rem_s = int(remaining_time % 60)
             print(f'CHILD {j+1}/{NumChildren} gen{i+1}/{NumGenerations} DONE | {progress:.1f}% | Time: {child_duration:.2f} s | Remaining: {rem_h}h {rem_m}m {rem_s}s')
+            reverse(RFgoal_in=0.9)  # Call reverse with the current RFgoal
         generationDf = pd.read_csv(f'./data/{name}/output/generations.csv')
         scoreDf = pd.read_csv(f'./data/{name}/output/children.csv')
         min_row = scoreDf.loc[scoreDf['score'].idxmin()]
@@ -176,11 +173,21 @@ def evolution():
         gen_end_time = time.time()
         gen_duration = gen_end_time - gen_start_time
         print(f'GENERATION {i+1}/{NumGenerations} DONE | Time: {gen_duration:.2f} s')
-    
+        
+        print("We now take your best results and set the properties in the model to those values")
+        bestPanelThick = ast.literal_eval(generationDf['panel thickness'][0])
+        bestStringerDim = ast.literal_eval(generationDf['stringer Parameters'][0])
+        bestPanelThick = np.round(bestPanelThick, rounding_digits)
+        bestStringerDim = np.round(bestStringerDim, rounding_digits)
+        print(f"Your best panel thickness: {bestPanelThick}")
+        print(f"Your best stringer dimensions: {bestStringerDim}")
+        print("Setting the model to these values...")
+        changeParameters(bestPanelThick, bestStringerDim)
+        print(f"Your current model mass is: {round(generationDf['mass'][0], 3)} kg whilst your limit mass is {personal_data_provider(name=name)[3]} kg")
     
        
 #reverse()
-#evolution()
+evolution()
 #resetAll(name=name)
 #Run_Optimisation_Ad_V3()
 
@@ -254,6 +261,6 @@ sampleAround = [
 localLHS(500, 0.02, sampleAround)
 
 
- # For now we reset the parameters afterwards
-print('Resetting model-parameters to initial values...')
-changeParameters([4.0,4.0,4.0,4.0,4.0],[[25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15]])
+# For now we reset the parameters afterwards
+#print('Resetting model-parameters to initial values...')
+#changeParameters([4.0,4.0,4.0,4.0,4.0],[[25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15]])

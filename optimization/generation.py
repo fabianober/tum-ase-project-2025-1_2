@@ -14,9 +14,9 @@ from helpers import *
 
 
 # Parameters for the optimization 
-rfPosScaling = 100
+rfPosScaling = 90
 rfNegScaling = 500
-NegweightScaling = 800
+NegweightScaling = 850
 PosweightScaling = 50
 RF_goal = 1.03
 
@@ -31,7 +31,7 @@ def rf_score(row):
 
 # mass score 
 def massScoreCalc(name):
-    maxMass = 28.625
+    maxMass = personal_data_provider(name)[3]  # Get the max mass from the personal data provider
     tot_mass = total_mass(name=name)
     clearance = maxMass-tot_mass
     if clearance <= 0:
