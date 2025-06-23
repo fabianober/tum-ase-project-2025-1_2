@@ -8,6 +8,9 @@ import sys
 import pandas as pd
 import ast
 import time
+import numpy as np
+# config parser
+import configparser
 
 sys.path.insert(0, os.path.abspath('..'))
 sys.path.insert(0, os.path.abspath('hmscript'))
@@ -30,10 +33,15 @@ from run_optimizer_adaptiveV3_6_fin import *
 model = hm.Model()
 
 '''Parameters for running the generational algorithm'''
-NumGenerations = 10
-NumChildren = 30
-NumReverse = 2
+NumGenerations = 2
+NumChildren = 3
+NumReverse = 5
 RFgoal = 0.9
+
+# get the rounding_digits from the ini file
+config = configparser.ConfigParser()
+config.read('./config.ini')
+rounding_digits = int(config['DEFAULT']['rounding_digits'])
 
 print("Getting your name...")
 
@@ -102,7 +110,7 @@ def reverse(RFgoal_in):
     run_get_properties(name=name)
     run_run_analysis(name=name)
     run_get_stresses(name=name)
-    calculate_panels(name=name)
+    calculate_panels(name=name, RFgoal=RFgoal_in)
     calculate_stringers(name=name, RFgoal=RFgoal_in)
 
     for i in range(NumReverse):
@@ -121,7 +129,7 @@ def reverse(RFgoal_in):
         run_get_properties(name=name)
         run_run_analysis(name=name)
         run_get_stresses(name=name)
-        calculate_panels(name=name)
+        calculate_panels(name=name, RFgoal=RFgoal_in)
         calculate_stringers(name=name, RFgoal=RFgoal_in)
         addScore(name=name)
     return None 
@@ -129,8 +137,8 @@ def reverse(RFgoal_in):
 def evolution():
 
     # call reverse() here with RF_goal from 0.9 onwards
-    for i in range(0, 11):
-        RFgoal = 0.9 + i * 0.01
+    for i in range(0, 4): # we have to set the range to 11 because we want to run it from 0.9 to 1.0
+        RFgoal = 0.9 + i * 0.03
         #print(f"Running reverse with RFgoal: {RFgoal}")
         reverse(RFgoal_in=RFgoal)
 
@@ -175,6 +183,7 @@ def evolution():
             rem_m = int((remaining_time % 3600) // 60)
             rem_s = int(remaining_time % 60)
             print(f'CHILD {j+1}/{NumChildren} gen{i+1}/{NumGenerations} DONE | {progress:.1f}% | Time: {child_duration:.2f} s | Remaining: {rem_h}h {rem_m}m {rem_s}s')
+            reverse(RFgoal_in=0.9)  # Call reverse with the current RFgoal
         generationDf = pd.read_csv(f'./data/{name}/output/generations.csv')
         scoreDf = pd.read_csv(f'./data/{name}/output/children.csv')
         min_row = scoreDf.loc[scoreDf['score'].idxmin()]
@@ -191,7 +200,17 @@ def evolution():
         gen_end_time = time.time()
         gen_duration = gen_end_time - gen_start_time
         print(f'GENERATION {i+1}/{NumGenerations} DONE | Time: {gen_duration:.2f} s')
-    
+        
+        print("We now take your best results and set the properties in the model to those values")
+        bestPanelThick = ast.literal_eval(generationDf['panel thickness'][0])
+        bestStringerDim = ast.literal_eval(generationDf['stringer Parameters'][0])
+        bestPanelThick = np.round(bestPanelThick, rounding_digits)
+        bestStringerDim = np.round(bestStringerDim, rounding_digits)
+        print(f"Your best panel thickness: {bestPanelThick}")
+        print(f"Your best stringer dimensions: {bestStringerDim}")
+        print("Setting the model to these values...")
+        changeParameters(bestPanelThick, bestStringerDim)
+        print(f"Your current model mass is: {round(generationDf['mass'][0], 3)} kg whilst your limit mass is {personal_data_provider(name=name)[3]} kg")
     
        
 #reverse()
@@ -264,9 +283,9 @@ sampleAround = [
     # skin_thickness_1..5
     4.719701115, 4.891748513, 4.949048523, 4.871264935, 5.568025744
 ]
-localLHS(790, 0.05, sampleAround)
+#localLHS(790, 0.05, sampleAround)
 
 
- # For now we reset the parameters afterwards
-print('Resetting model-parameters to initial values...')
-changeParameters([4.0,4.0,4.0,4.0,4.0],[[25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15]])
+# For now we reset the parameters afterwards
+#print('Resetting model-parameters to initial values...')
+#changeParameters([4.0,4.0,4.0,4.0,4.0],[[25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15]])

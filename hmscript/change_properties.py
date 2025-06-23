@@ -119,13 +119,8 @@ def updateStringerOffset():
     return None 
 
 
-
 def changeParameters(skinTickness, stringerDim):
     changePanelThickness(skinTickness) #update panel Dimensions (array of 5 thicknesses)
     changeStringerDimensions(stringerDim)  #update stringer dimensions (list within list, (Dim1: height, Dim2; thickness, Dim3: "head" width, Dim4: length of Omega 'legs'))
     updatePanelOffset(skinTickness)
     updateStringerOffset()
-
-
-
-

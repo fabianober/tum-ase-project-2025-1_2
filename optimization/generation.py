@@ -14,9 +14,9 @@ from helpers import *
 
 
 # Parameters for the optimization 
-rfPosScaling = 100
+rfPosScaling = 90
 rfNegScaling = 500
-NegweightScaling = 800
+NegweightScaling = 850
 PosweightScaling = 50
 RF_goal = 1.03
 
