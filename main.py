@@ -50,42 +50,6 @@ with open("name.txt", "r") as f:
 
 print(f"Your name is: {name}")
 
-
-# Uncomment if needed 
-
-"""# run get_properties
-print('-----------------------')
-print('Running get_properties...')
-run_get_properties(name=name)
-
-# run analysis and clean up
-print('-----------------------')
-print('Running run_run_analysis...')
-run_run_analysis(name=name)
-
-
-# get stresses
-print('-----------------------')
-print('Running run_run_analysis...')
-run_get_stresses(name=name)
-
-# run our scripts
-print('-----------------------')
-print('We have successfully run the hm analysis and can now run the calculators')
-print('Running mass calculator...')
-total_mass = total_mass(name=name)
-print(f"Total mass of the structure: {total_mass} kg")
-
-print('-----------------------')
-print('Running panels calculator...')
-calculate_panels(name=name)
-
-
-print('-----------------------')
-print('Running stringers calculator...')
-calculate_stringers(name=name)"""
-
-
 # For now create the score of the originial model 
 #run_get_properties(name=name)
 #run_run_analysis(name=name)
@@ -137,9 +101,18 @@ def reverse(RFgoal_in):
 def evolution():
 
     # call reverse() here with RF_goal from 0.9 onwards
+
+    try:
+        generationDf = pd.read_csv(f'./data/{name}/output/generations.csv')
+        bestPanelThickBefore = ast.literal_eval(generationDf['panel thickness'][0])
+        bestStringerDimBefore = ast.literal_eval(generationDf['stringer Parameters'][0])
+    except:
+        bestPanelThickBefore = [4.0, 4.0, 4.0, 4.0, 4.0]
+        bestStringerDimBefore = [[25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15]]
+
     for i in range(0, 4): # we have to set the range to 11 because we want to run it from 0.9 to 1.0
         RFgoal = 0.9 + i * 0.03
-        #print(f"Running reverse with RFgoal: {RFgoal}")
+        changeParameters(bestPanelThickBefore, bestStringerDimBefore)  # Set the initial parameters before starting the evolution
         reverse(RFgoal_in=RFgoal)
 
     total_children = NumGenerations * NumChildren
