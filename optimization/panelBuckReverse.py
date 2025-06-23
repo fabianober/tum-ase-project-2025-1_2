@@ -1,5 +1,5 @@
 import math 
-RF_goal = 0.9
+
 
 
 # Function for calculating the 
@@ -13,7 +13,7 @@ def reverseShear(RF_goal, tau_applied, k_shear, EModulus, nu, width):
     thickness = width * math.sqrt(12* (tau_crit/(k_shear*EModulus * math.pi**2)) * (1-nu**2))
     return thickness
 
-def panelBuckReverse(row, EModulus, nu):
+def panelBuckReverse(row, EModulus, nu, RF_goal):
     # For biaxial we first need to check the principal direction 
     if row['sigmaYY'] < row['sigmaXX']: 
         #Swap stresses 
