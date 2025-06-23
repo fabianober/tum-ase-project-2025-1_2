@@ -52,7 +52,7 @@ def localLHS(n_samples_in, spread_in, base_input_in, output_csv="lhs_results.csv
         result = fem_evaluate_vector(list(x), "felix", 1.05)
         row = {}
         row["timestamp"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        row["stage"] = "sampling"
+        row["stage"] = "Frontier_sampling"
         row["region"] = -1
         row["fem_call_idx"] = i
 
