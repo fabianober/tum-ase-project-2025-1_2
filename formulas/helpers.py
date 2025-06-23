@@ -51,7 +51,7 @@ def personal_data_provider(name):
         sigma_yield = 490
         EModulus = 65669.47
         nu = 0.34
-        max_mass = 28.667 # PLEASE CHANGE!
+        max_mass = 28.821
     elif name == 'felix':
         sigma_yield = 490
         EModulus = 65143.57
