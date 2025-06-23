@@ -12,7 +12,7 @@ from columnBuckReverse import *
 
 
 # weigthing factors for dim1, dim3, dim4
-weightDim1 = 0.8
+weightDim1 = 1
 weightDim3 = 0.3 
 weightDim4 = 0.001
 
