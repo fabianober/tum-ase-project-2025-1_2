@@ -13,7 +13,7 @@ from columnBuckReverse import *
 
 # weigthing factors for dim1, dim3, dim4
 weightDim1 = 1
-weightDim3 = 0.3 
+weightDim3 = 0.1
 weightDim4 = 0.001
 
 def assembleUpdate(name):

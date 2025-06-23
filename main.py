@@ -86,7 +86,7 @@ def reverse(RFgoal_in):
             print("Aborting the reverse algorithm. Bye...")
             sys.exit()
 
-        print(f"Reverse iteration {i+1}/{NumReverse} with RFgoal: {RFgoal_in}")
+        print(f"Reverse iteration with RFgoal: {RFgoal_in}")
         newThick, newStringerDims = assembleUpdate(name)
         #print(newThick)
         changeParameters(newThick, newStringerDims)
@@ -110,8 +110,7 @@ def evolution():
         bestPanelThickBefore = [4.0, 4.0, 4.0, 4.0, 4.0]
         bestStringerDimBefore = [[25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15]]
 
-    for i in range(0, 4): # we have to set the range to 11 because we want to run it from 0.9 to 1.0
-        RFgoal = 1.9 + i * 0.03
+    for RFgoal in np.arange(1, 1.75, 0.05): # we have to set the range to 11 because we want to run it from 0.9 to 1.0
         changeParameters(bestPanelThickBefore, bestStringerDimBefore)  # Set the initial parameters before starting the evolution
         reverse(RFgoal_in=RFgoal)
 
