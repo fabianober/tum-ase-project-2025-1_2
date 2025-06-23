@@ -34,7 +34,7 @@ model = hm.Model()
 
 '''Parameters for running the generational algorithm'''
 NumGenerations = 2
-NumChildren = 3
+NumChildren = 10
 NumReverse = 5
 RFgoal = 0.9
 
@@ -173,7 +173,7 @@ def evolution():
         gen_end_time = time.time()
         gen_duration = gen_end_time - gen_start_time
         print(f'GENERATION {i+1}/{NumGenerations} DONE | Time: {gen_duration:.2f} s')
-        reverse(RFgoal_in=0.9)  # Call reverse with the current RFgoal
+        #reverse(RFgoal_in=0.9)  # Call reverse with the current RFgoal
         
     print("We now take your best results and set the properties in the model to those values")
     bestPanelThick = ast.literal_eval(generationDf['panel thickness'][0])
