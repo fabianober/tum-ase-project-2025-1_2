@@ -2,7 +2,9 @@ import hm
 import os 
 
 def run_run_analysis(name):
-    os.remove(f"data/{name}/hmout/input.strs")
+    input_strs_path = f"data/{name}/hmout/input.strs"
+    if os.path.exists(input_strs_path):
+        os.remove(input_strs_path)
     #Constants
     if name == 'felix':
         solver_template = "C:/Program Files/Altair/2024.1/hwdesktop/templates/feoutput/optistruct/optistruct"
@@ -21,7 +23,7 @@ def run_run_analysis(name):
     if name == 'fabian':
         os.system(r'"C:\Program Files\Altair\2023.1\hwsolvers\scripts\optistruct.bat" data/fabian/hmout/input.fem')
     elif name == 'yannis':
-        os.system(r'"C:\Program Files\Altair\2023.1\hwsolvers\scripts\optistruct.bat" data/yannis/hmout/input.fem -cores 4')
+        os.system(r'"C:\Program Files\Altair\2023.1\hwsolvers\scripts\optistruct.bat" data/yannis/hmout/input.fem')
     elif name == 'daniel':
         os.system(r'"C:\Program Files\Altair\2023.1\hwsolvers\scripts\optistruct.bat" data/daniel/hmout/input.fem')
     elif name == 'felix':
