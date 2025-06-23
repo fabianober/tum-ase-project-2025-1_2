@@ -35,7 +35,7 @@ model = hm.Model()
 '''Parameters for running the generational algorithm'''
 NumGenerations = 2
 NumChildren = 10
-NumReverse = 5
+NumReverse = 2
 RFgoal = 0.9
 
 # get the rounding_digits from the ini file
@@ -111,7 +111,7 @@ def evolution():
         bestStringerDimBefore = [[25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15]]
 
     for i in range(0, 4): # we have to set the range to 11 because we want to run it from 0.9 to 1.0
-        RFgoal = 0.9 + i * 0.03
+        RFgoal = 1.9 + i * 0.03
         changeParameters(bestPanelThickBefore, bestStringerDimBefore)  # Set the initial parameters before starting the evolution
         reverse(RFgoal_in=RFgoal)
 
