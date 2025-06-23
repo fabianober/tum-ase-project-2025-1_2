@@ -16,7 +16,7 @@ from matplotlib.widgets import Button
 
 plt.style.use('seaborn-v0_8-colorblind')
 
-CSV_PATH = r'.\data\fabian\output\generations.csv'
+CSV_PATH = r'.\data\yannis\output\generations.csv'
 
 def load_data():
     df = pd.read_csv(
