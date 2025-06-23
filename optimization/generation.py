@@ -31,7 +31,7 @@ def rf_score(row):
 
 # mass score 
 def massScoreCalc(name):
-    maxMass = 28.625
+    maxMass = personal_data_provider(name)[3]  # Get the max mass from the personal data provider
     tot_mass = total_mass(name=name)
     clearance = maxMass-tot_mass
     if clearance <= 0:

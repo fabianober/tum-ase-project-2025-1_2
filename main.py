@@ -30,9 +30,9 @@ from run_optimizer_adaptiveV3_6_fin import *
 model = hm.Model()
 
 '''Parameters for running the generational algorithm'''
-NumGenerations = 8
+NumGenerations = 10
 NumChildren = 30
-NumReverse = 1
+NumReverse = 2
 RFgoal = 0.9
 
 print("Getting your name...")
@@ -97,28 +97,43 @@ def resetAll(name):
 
 
 # Reverse engineering 
-def reverse():
+def reverse(RFgoal_in):
     # Recalculate current state 
     run_get_properties(name=name)
     run_run_analysis(name=name)
     run_get_stresses(name=name)
     calculate_panels(name=name)
-    calculate_stringers(name=name, RFgoal=RFgoal)
+    calculate_stringers(name=name, RFgoal=RFgoal_in)
 
     for i in range(NumReverse):
-        print(i)
+
+        # For security, we check if we want to abbort. We read the file every time to ensure we catch any changes.
+        with open("abort.bye", "r") as f:
+            abort = f.read().strip()
+        if abort == "1":
+            print("Aborting the reverse algorithm. Bye...")
+            sys.exit()
+
+        print(f"Reverse iteration {i+1}/{NumReverse} with RFgoal: {RFgoal_in}")
         newThick, newStringerDims = assembleUpdate(name)
-        print(newThick)
+        #print(newThick)
         changeParameters(newThick, newStringerDims)
         run_get_properties(name=name)
         run_run_analysis(name=name)
         run_get_stresses(name=name)
         calculate_panels(name=name)
-        calculate_stringers(name=name, RFgoal=RFgoal)
+        calculate_stringers(name=name, RFgoal=RFgoal_in)
         addScore(name=name)
     return None 
 
 def evolution():
+
+    # call reverse() here with RF_goal from 0.9 onwards
+    for i in range(0, 11):
+        RFgoal = 0.9 + i * 0.01
+        #print(f"Running reverse with RFgoal: {RFgoal}")
+        reverse(RFgoal_in=RFgoal)
+
     total_children = NumGenerations * NumChildren
     child_times = []
     children_done = 0
@@ -179,8 +194,8 @@ def evolution():
     
     
        
-reverse()
-#evolution()
+#reverse()
+evolution()
 #resetAll(name=name)
 #Run_Optimisation_Ad_V3()
 
@@ -199,6 +214,57 @@ def Test():
     print(out)
 
 #Test()
+
+def testingFnc():
+    # Call your evaluation function
+    input = [28,28,28,29,29,        #Dim 1
+             25,25,26,26,26,        # Dim 2
+             6,6,6,6,6,             # Dim 3
+             5,5,5,5,5,             # Dim 4
+             5,4.8,5,5,5.5]  #Skin thicknesses
+    print("Using the input:")
+    print(input)
+    print("The result is:")
+    result = fem_evaluate_vector(input, "felix", 1.05)
+    print(result)
+    
+    # Set your threshold
+    threshold = 1.05
+
+    # Assuming result is a tuple as in your output, and the "RFs" are arrays at index 1, 2, 3
+    rfs = []
+    for idx in [1, 2, 3]:
+        arr = result[idx]
+        if hasattr(arr, '__iter__'):  # just to be safe
+            rfs.extend(arr)
+    
+    # Check if any RF is below the threshold
+    any_below = any(rf < threshold for rf in rfs)
+    
+    if any_below:
+        print(f"At least one RF is below the threshold of {threshold}!")
+    else:
+        print(f"All RFs are above the threshold of {threshold}.")
+
+    return 0
+
+#testingFnc()
+
+
+from local_LHS import *
+sampleAround = [
+    # web_height_1..5
+    28.56829483, 28.69685558, 29.13367782, 28.79480978, 28.05068107,
+    # flange_width_1..5
+    28.0740408, 23.73077397, 23.14150937, 27.29645083, 25.06054826,
+    # lip_height_1..5
+    6.018909193, 6.175778463, 6.402557275, 5.428070725, 5.960830957,
+    # thickness_1..5
+    4.482355788, 4.871969974, 4.888170621, 5.190968939, 4.58977607,
+    # skin_thickness_1..5
+    4.719701115, 4.891748513, 4.949048523, 4.871264935, 5.568025744
+]
+localLHS(790, 0.05, sampleAround)
 
 
  # For now we reset the parameters afterwards
