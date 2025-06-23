@@ -2,6 +2,7 @@ import hm
 import os 
 
 def run_run_analysis(name):
+    os.remove(f"data/{name}/hmout/input.strs")
     #Constants
     if name == 'felix':
         solver_template = "C:/Program Files/Altair/2024.1/hwdesktop/templates/feoutput/optistruct/optistruct"

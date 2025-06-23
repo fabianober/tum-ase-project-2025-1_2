@@ -119,6 +119,7 @@ def evolution():
     child_times = []
     children_done = 0
     generationDf = pd.read_csv(f'./data/{name}/output/generations.csv')
+    generationDf = generationDf.sort_values(by='score', ascending=True).reset_index(drop=True)
     currentIndex = generationDf['GenIndex'].max()
     for i in range(0, NumGenerations):
         gen_start_time = time.time()
