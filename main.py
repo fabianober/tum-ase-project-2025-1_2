@@ -30,9 +30,9 @@ from run_optimizer_adaptiveV3_6_fin import *
 model = hm.Model()
 
 '''Parameters for running the generational algorithm'''
-NumGenerations = 8
+NumGenerations = 10
 NumChildren = 30
-NumReverse = 1
+NumReverse = 2
 RFgoal = 0.9
 
 print("Getting your name...")
@@ -97,28 +97,43 @@ def resetAll(name):
 
 
 # Reverse engineering 
-def reverse():
+def reverse(RFgoal_in):
     # Recalculate current state 
     run_get_properties(name=name)
     run_run_analysis(name=name)
     run_get_stresses(name=name)
     calculate_panels(name=name)
-    calculate_stringers(name=name, RFgoal=RFgoal)
+    calculate_stringers(name=name, RFgoal=RFgoal_in)
 
     for i in range(NumReverse):
-        print(i)
+
+        # For security, we check if we want to abbort. We read the file every time to ensure we catch any changes.
+        with open("abort.bye", "r") as f:
+            abort = f.read().strip()
+        if abort == "1":
+            print("Aborting the reverse algorithm. Bye...")
+            sys.exit()
+
+        print(f"Reverse iteration {i+1}/{NumReverse} with RFgoal: {RFgoal_in}")
         newThick, newStringerDims = assembleUpdate(name)
-        print(newThick)
+        #print(newThick)
         changeParameters(newThick, newStringerDims)
         run_get_properties(name=name)
         run_run_analysis(name=name)
         run_get_stresses(name=name)
         calculate_panels(name=name)
-        calculate_stringers(name=name, RFgoal=RFgoal)
+        calculate_stringers(name=name, RFgoal=RFgoal_in)
         addScore(name=name)
     return None 
 
 def evolution():
+
+    # call reverse() here with RF_goal from 0.9 onwards
+    for i in range(0, 11):
+        RFgoal = 0.9 + i * 0.01
+        #print(f"Running reverse with RFgoal: {RFgoal}")
+        reverse(RFgoal_in=RFgoal)
+
     total_children = NumGenerations * NumChildren
     child_times = []
     children_done = 0
@@ -179,8 +194,8 @@ def evolution():
     
     
        
-reverse()
-#evolution()
+#reverse()
+evolution()
 #resetAll(name=name)
 #Run_Optimisation_Ad_V3()
 

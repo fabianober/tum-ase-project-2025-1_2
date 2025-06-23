@@ -41,19 +41,23 @@ def personal_data_provider(name):
         sigma_yield = 490
         EModulus = 65241.07
         nu = 0.34
+        max_mass = 28.625
     elif name == 'fabian':
         sigma_yield = 490
         EModulus = 65420.46
         nu = 0.34
+        max_mass = 28.667
     elif name == 'daniel':
         sigma_yield = 490
         EModulus = 65669.47
         nu = 0.34
+        max_mass = 28.667 # PLEASE CHANGE!
     elif name == 'felix':
         sigma_yield = 490
         EModulus = 65143.57
         nu = 0.34
-    return sigma_yield, EModulus, nu
+        max_mass = 28.667 # PLEASE CHANGE!
+    return sigma_yield, EModulus, nu, max_mass
 
 def add_component_names_to_elements(df, component_mapping_df, element_id_column='Element ID', component_name_column='Component Name'):
     """
