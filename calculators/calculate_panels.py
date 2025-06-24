@@ -187,7 +187,7 @@ def calculate_panels(name, RFgoal=1):
     # # ROUND & Output the files
 
     #outputDf = outputDf.round(rounding_digits)
-    outputDf.to_csv(os.path.join(BASE_DIR, f'../data/{name}/output/processed_e.csv'))
+    outputDf.to_excel(os.path.join(BASE_DIR, f'../data/{name}/output/processed_e.xlsx'))
     updateParametersDf = updateParametersDf.round(rounding_digits)
     updateParametersDf.to_csv(os.path.join(BASE_DIR, f'../data/{name}/output/updatePanelThick.csv'))
 

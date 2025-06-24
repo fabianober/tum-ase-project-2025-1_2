@@ -13,17 +13,14 @@ from formulas.columnbuckling import *
 from formulas.panels import *
 from formulas.strength import *
 from formulas.helpers import *
-import configparser
 
 # get the rounding_digits from the ini file
-config = configparser.ConfigParser()
-config.read('../config.ini')
-rounding_digits = int(config['DEFAULT']['rounding_digits'])
+rounding_digits = 3
 
 def calculate_strength(name):
     # This will become the new import for the panel stresses
-    paneldf = pd.read_csv(f'../data/{name}/panel.csv')
-    stringerdf= pd.read_csv(f'../data/{name}/stringer.csv')
+    paneldf = pd.read_csv(os.path.join(BASE_DIR, f'../data/{name}/panel.csv'))
+    stringerdf= pd.read_csv(os.path.join(BASE_DIR, f'../data/{name}/stringer.csv'))
 
     sigma_ult = 530
 
@@ -67,7 +64,7 @@ def calculate_strength(name):
     outputdf = pd.concat([loadCase1df,loadCase2df, loadCase3df], axis=1)
     # # ROUND & Export back to Excel 
     outputdf = outputdf.round(rounding_digits)
-    outputdf.to_excel(f'../data/{name}/output/processed_d.xlsx')
+    outputdf.to_excel(os.path.join(BASE_DIR, f'../data/{name}/output/processed_d.xlsx'))
 
 if __name__ == "__main__":
     calculate_strength('fabian')
