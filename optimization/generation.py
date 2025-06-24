@@ -42,7 +42,7 @@ def massScoreCalc(name):
 
 
 
-# Extracts the panel thickness from the stringer dataframe 
+# Extracts the panel thickness from the panel dataframe 
 def extractThickness(df):
     thicknesses = []
     for i in range(1,6):
