@@ -25,6 +25,7 @@ from change_properties import *
 from mass import *
 from calculate_panels import *
 from calculate_stringers import *
+from calculate_strength import *
 from generation import *
 from ReverseEngineering import *
 
@@ -33,8 +34,8 @@ from run_optimizer_adaptiveV3_6_fin import *
 model = hm.Model()
 
 '''Parameters for running the generational algorithm'''
-NumGenerations = 5
-NumChildren = 5
+NumGenerations = 2
+NumChildren = 2
 NumReverse = 1 # beacuse we found out, nothing changes after the first reverse iteration
 RFgoal = 0.9
 
@@ -110,7 +111,7 @@ def evolution():
         bestPanelThickBefore = [4.0, 4.0, 4.0, 4.0, 4.0]
         bestStringerDimBefore = [[25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15]]
 
-    for RFgoal in np.arange(1, 1.75, 0.05): # we have to set the range to 11 because we want to run it from 0.9 to 1.0
+    for RFgoal in np.arange(1, 1.1, 0.05): # we have to set the range to 11 because we want to run it from 0.9 to 1.0
         changeParameters(bestPanelThickBefore, bestStringerDimBefore)  # Set the initial parameters before starting the evolution
         reverse(RFgoal_in=RFgoal)
 
@@ -189,6 +190,8 @@ def evolution():
     run_get_stresses(name=name)
     calculate_panels(name=name)
     calculate_stringers(name=name)
+    calculate_strength(name=name)
+    write_mass_to_file(name=name)
     print(f"Your current model mass is: {round(generationDf['mass'][0], 3)} kg whilst your limit mass is {personal_data_provider(name=name)[3]} kg")
     
        

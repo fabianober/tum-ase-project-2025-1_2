@@ -13,16 +13,18 @@ def total_mass(name):
                 total_mass += float(row['mass'])
     
     total_mass = round(total_mass *1000, 3)
+    return total_mass  # Convert tonns to kg
 
+def write_mass_to_file(name):
+    base_dir = os.path.dirname(os.path.abspath(__file__))
     output_dir = os.path.join(base_dir, '..', 'data', name, 'output')
     os.makedirs(output_dir, exist_ok=True)
     output_path = os.path.join(output_dir, 'mass.txt')
     with open(output_path, 'w') as f:
-        f.write(f"{total_mass}")
-    
-    return total_mass  # Convert tonns to kg
-
+        f.write(f"{total_mass(name)}")
+    return True
 
 if __name__ == "__main__":
     mass = total_mass('fabian')
     print(f"Total mass: {mass}")
+    print(write_mass_to_file('fabian'))
