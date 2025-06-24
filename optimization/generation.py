@@ -18,7 +18,7 @@ rfPosScaling = 5
 rfNegScaling = 500
 NegweightScaling = 850
 PosweightScaling = 1
-RF_goal = 1.05
+RF_goal = 1.1
 
 
 # Assign the RF a score 
