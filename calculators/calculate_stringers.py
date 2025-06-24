@@ -1,4 +1,5 @@
 # ## Imports
+
 import pandas as pd
 import numpy as np
 import sys 
@@ -11,7 +12,6 @@ from formulas.panels import *
 from formulas.helpers import *
 from optimization.generation import *
 from optimization.columnBuckReverse import *
-
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -230,7 +230,7 @@ def calculate_stringers(name, RFgoal=1):
     
 
 
-    evaluateDf = evaluateDf.drop(['Volume' ,'thickness' , 'sigma_XX_avg', 'I_yy',  'areaTot', 'VolumeTot', 'sigma_crip', 'lambda_crit', 'lambda', 'r_gyr', 'sigma_crit'], axis =1)
+    evaluateDf = evaluateDf.drop(['Volume', 'tLeft', 'tRight', 'sigma_XX_avg', 'I_yy',  'areaTot', 'VolumeTot', 'sigma_crip', 'lambda_crit', 'lambda', 'r_gyr', 'sigma_crit'], axis =1)
 
     evaluateDf.to_csv(os.path.join(BASE_DIR, f'../data/{name}/output/StringerRFs.csv'), index=False)
 
@@ -255,7 +255,7 @@ def calculate_stringers(name, RFgoal=1):
                                                                     stringerPitch=stringer_pitch,
                                                                     length=stringer_element_length*3,
                                                                     RFgoal=RFgoal, axis=1, result_type='expand')
-    updateDF = updateDF.drop(['Volume' ,'thickness' , 'sigma_XX_avg', 'I_yy',  'areaTot', 'VolumeTot', 'sigma_crip', 'lambda_crit', 'lambda', 'r_gyr', 'sigma_crit'], axis =1)
+    updateDF = updateDF.drop(['Volume', 'tLeft', 'tRight', 'sigma_XX_avg', 'I_yy',  'areaTot', 'VolumeTot', 'sigma_crip', 'lambda_crit', 'lambda', 'r_gyr', 'sigma_crit'], axis =1)
     # ##Keep only essential data 
     updateDF = updateDF.groupby('Stiffener').agg({
     'dim1': 'max',
@@ -285,9 +285,9 @@ def calculate_stringers(name, RFgoal=1):
 
     # # Cleanup data for output 
     # ## Drop unenessacry columns 
-    lc1combined = lc1combined.drop(['Volume', 'thickness', 'dim1', 'dim2', 'dim3', 'dim4', 'areaTot', 'VolumeTot'], axis=1)
-    lc2combined = lc2combined.drop(['Volume', 'thickness', 'dim1', 'dim2', 'dim3', 'dim4', 'areaTot', 'VolumeTot'], axis=1)
-    lc3combined = lc3combined.drop(['Volume', 'thickness', 'dim1', 'dim2', 'dim3', 'dim4', 'areaTot', 'VolumeTot'], axis=1)
+    lc1combined = lc1combined.drop(['Volume', 'tLeft', 'tRight', 'dim1', 'dim2', 'dim3', 'dim4', 'areaTot', 'VolumeTot'], axis=1)
+    lc2combined = lc2combined.drop(['Volume', 'tLeft', 'tRight', 'dim1', 'dim2', 'dim3', 'dim4', 'areaTot', 'VolumeTot'], axis=1)
+    lc3combined = lc3combined.drop(['Volume', 'tLeft', 'tRight', 'dim1', 'dim2', 'dim3', 'dim4', 'areaTot', 'VolumeTot'], axis=1)
 
     # ## ROUND & Add together the load cases
     # Rename colums for concat
