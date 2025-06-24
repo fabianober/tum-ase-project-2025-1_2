@@ -1,5 +1,6 @@
 import hm 
 import hm.entities as ent
+import pandas as pd 
 
 model = hm.Model()
 
@@ -124,3 +125,96 @@ def changeParameters(skinTickness, stringerDim):
     changeStringerDimensions(stringerDim)  #update stringer dimensions (list within list, (Dim1: height, Dim2; thickness, Dim3: "head" width, Dim4: length of Omega 'legs'))
     updatePanelOffset(skinTickness)
     updateStringerOffset()
+
+def writeOffset(name):
+    # Extract the panel dimensions and offset 
+    panelThickness =[]
+    panelOffset = []
+    panelID = [1,2,3,4,5]
+    
+    #Extract thickness and offset
+    parameters = hm.Collection(model, ent.Parameter)
+    for param in parameters:
+        if param.name == 'panelT1':
+            panelThickness.append(param.valuedouble)
+            panelOffset.append(param.valuedouble/2)
+        elif param.name == 'panelT2' :
+            panelThickness.append(param.valuedouble)
+            panelOffset.append(param.valuedouble/2)
+        elif param.name =='panelT3' :
+            panelThickness.append(param.valuedouble)
+            panelOffset.append(param.valuedouble/2)
+        elif param.name == 'panelT4':
+            panelThickness.append(param.valuedouble)
+            panelOffset.append(param.valuedouble/2)
+        elif param.name == 'panelT5':
+            panelThickness.append(param.valuedouble)
+            panelOffset.append(param.valuedouble/2)
+    
+    #Write into dataframe 
+    panelDimDf = pd.DataFrame({
+        'panel ID': panelID,
+        't_new':panelThickness,
+        'offset':panelOffset
+    })
+
+    panelDimDf.to_excel(,index=False)
+
+    # Extract the stringer dimensions and offset 
+    stringerDim1 = []
+    stringerDim2 = []
+    stringerDim3 = []
+    stringerDim4 = []
+    stringerOffset = []
+    stringerID = [1,2,3,4,5]
+    
+    #Extract dimensions and offsets 
+    beamsects = hm.Collection(model, ent.Beamsection)
+    for beamsect in beamsects:  
+        if beamsect.name == 'Stringer_Section1':
+            stringerDim1.append(beamsect.beamsect_dim1)
+            stringerDim2.append(beamsect.beamsect_dim2)
+            stringerDim3.append(beamsect.beamsect_dim3)
+            stringerDim4.append(beamsect.beamsect_dim4)
+            stringerOffset.append(-round(beamsect.results_coordExt0,3))
+
+        elif beamsect.name == 'Stringer_Section2':
+            stringerDim1.append(beamsect.beamsect_dim1)
+            stringerDim2.append(beamsect.beamsect_dim2)
+            stringerDim3.append(beamsect.beamsect_dim3)
+            stringerDim4.append(beamsect.beamsect_dim4)
+            stringerOffset.append(-round(beamsect.results_coordExt0,3))
+        elif beamsect.name == 'Stringer_Section3':
+            stringerDim1.append(beamsect.beamsect_dim1)
+            stringerDim2.append(beamsect.beamsect_dim2)
+            stringerDim3.append(beamsect.beamsect_dim3)
+            stringerDim4.append(beamsect.beamsect_dim4)
+            stringerOffset.append(-round(beamsect.results_coordExt0,3))
+        elif beamsect.name == 'Stringer_Section4':
+            stringerDim1.append(beamsect.beamsect_dim1)
+            stringerDim2.append(beamsect.beamsect_dim2)
+            stringerDim3.append(beamsect.beamsect_dim3)
+            stringerDim4.append(beamsect.beamsect_dim4)
+            stringerOffset.append(-round(beamsect.results_coordExt0,3))
+        elif beamsect.name == 'Stringer_Section5':
+            stringerDim1.append(beamsect.beamsect_dim1)
+            stringerDim2.append(beamsect.beamsect_dim2)
+            stringerDim3.append(beamsect.beamsect_dim3)
+            stringerDim4.append(beamsect.beamsect_dim4)
+            stringerOffset.append(-round(beamsect.results_coordExt0,3))
+    
+    # Create dataframe
+    stringerDimDf = pd.DataFrame({
+        'stringer ID':stringerID,
+        'newDim1': stringerDim1,
+        'newDim2': stringerDim2,
+        'newDim3': stringerDim3,
+        'newDim4': stringerDim4,
+        'offset':stringerOffset
+    })
+    
+    # Write output file 
+    stringerDimDf.to_excel(,index=False)
+
+    print('Have written dimensions')
+    return None 
