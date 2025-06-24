@@ -65,7 +65,7 @@ def crosssectional_properties_hat_skin(DIM1, DIM2, DIM3, DIM4, thickness_skin_le
 
     # z-coordinates (from bottom)
     z_skin_left = -thickness_skin_left / 2
-    z_skin_right = -thickness_skin_left / 2
+    z_skin_right = -thickness_skin_right / 2
     z_bottom = DIM2 / 2
     z_web = (DIM1 - DIM2) / 2 #+ DIM2
     z_top = DIM1 - DIM2 / 2
