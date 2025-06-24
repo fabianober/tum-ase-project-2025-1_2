@@ -185,6 +185,7 @@ def evolution():
     print(f"Your best stringer dimensions: {bestStringerDim}")
     print("Setting the model to these values...")
     changeParameters(bestPanelThick, bestStringerDim)
+    writeOffset(name=name)
     run_get_properties(name=name)
     run_run_analysis(name=name)
     run_get_stresses(name=name)
