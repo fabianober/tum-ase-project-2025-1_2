@@ -1,8 +1,10 @@
 import hm 
 import hm.entities as ent
 import pandas as pd 
+import os
 
 model = hm.Model()
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 #Change the panel Thickness
 def changePanelThickness(panelThickness):
@@ -158,7 +160,7 @@ def writeOffset(name):
         'offset':panelOffset
     })
 
-    panelDimDf.to_excel(,index=False)
+    panelDimDf.to_excel(os.path.join(BASE_DIR, f'../data/{name}/output/optimized_panel_properties.xlsx'),index=False)
 
     # Extract the stringer dimensions and offset 
     stringerDim1 = []
@@ -214,7 +216,7 @@ def writeOffset(name):
     })
     
     # Write output file 
-    stringerDimDf.to_excel(,index=False)
+    stringerDimDf.to_excel(os.path.join(BASE_DIR, f'../data/{name}/output/optimized_stringer_properties.xlsx'),index=False)
 
     print('Have written dimensions')
     return None 

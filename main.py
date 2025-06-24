@@ -31,6 +31,8 @@ from ReverseEngineering import *
 
 from run_optimizer_adaptiveV3_6_fin import *
 
+cleaUp_before = sys.argv[1]
+
 model = hm.Model()
 
 '''Parameters for running the generational algorithm'''
@@ -57,6 +59,14 @@ print(f"Your name is: {name}")
 #calculate_panels(name=name)
 #calculate_stringers(name=name)
 #oneScoreDf(name=name, index=0)
+
+if cleaUp_before == "1":
+    output_dir = f'./data/{name}/output'
+    if os.path.exists(output_dir):
+        for filename in os.listdir(output_dir):
+            file_path = os.path.join(output_dir, filename)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
 
 # Here the generational algorithm is run 
 def resetAll(name):
