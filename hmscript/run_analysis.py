@@ -23,9 +23,9 @@ def run_run_analysis(name):
     if name == 'fabian':
         os.system(r'"C:\Program Files\Altair\2025\hwsolvers\scripts\optistruct.bat" data/fabian/hmout/input.fem')
     elif name == 'yannis':
-        os.system(r'"C:\Program Files\Altair\2023.1\hwsolvers\scripts\optistruct.bat" data/yannis/hmout/input.fem')
+        os.system(r'"C:\Program Files\Altair\2025\hwsolvers\scripts\optistruct.bat" data/yannis/hmout/input.fem')
     elif name == 'daniel':
-        os.system(r'"C:\Program Files\Altair\2023.1\hwsolvers\scripts\optistruct.bat" data/daniel/hmout/input.fem')
+        os.system(r'"C:\Program Files\Altair\2025\hwsolvers\scripts\optistruct.bat" data/daniel/hmout/input.fem')
     elif name == 'felix':
         #print("Bin da")
         os.system(r'"C:\Program Files\Altair\2024.1\hwsolvers\scripts\optistruct.bat" data/felix/hmout/input.fem')
