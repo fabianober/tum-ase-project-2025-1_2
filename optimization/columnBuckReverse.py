@@ -239,16 +239,16 @@ def reverseColumn_Euler_thickness_skin_left(RF_goal, DIM01, DIM02, DIM03, DIM04,
 
 def reverseAllDims(row, EModulus, stringerPitch, length, RFgoal):
     new_dim1 = reverseColumn_Euler_DIM1(RF_goal=RFgoal , DIM01=row['dim1'], DIM02=row['dim2'], DIM03=row['dim3'], 
-                                        DIM04=row['dim4'], stringer_pitch_in=stringerPitch, thickness_skin_in=row['tLeft'],
+                                        DIM04=row['dim4'], stringer_pitch_in=stringerPitch, thickness_skin_left_in=row['tLeft'], thickness_skin_right_in=row['tRight'],
                                          length=length, c=1, EModulus=EModulus, sigma_applied=row['sigma_XX_avg'])
     '''new_dim2 = reverseColumn_Euler_DIM2(RF_goal=RFgoal , DIM01=row['dim1'], DIM02=row['dim2'], DIM03=row['dim3'], 
-                                       DIM04=row['dim4'], stringer_pitch_in=stringerPitch, thickness_skin_in=row['tLeft'],
+                                       DIM04=row['dim4'], stringer_pitch_in=stringerPitch, thickness_skin_left_in=row['tLeft'], thickness_skin_right_in=row['tRight'],
                                          length=length, c=1, EModulus=EModulus, sigma_applied=row['sigma_XX_avg'])'''
     new_dim3 = reverseColumn_Euler_DIM3(RF_goal=RFgoal , DIM01=row['dim1'], DIM02=row['dim2'], DIM03=row['dim3'], 
-                                       DIM04=row['dim4'], stringer_pitch_in=stringerPitch, thickness_skin_in=row['tLeft'],
+                                       DIM04=row['dim4'], stringer_pitch_in=stringerPitch, thickness_skin_left_in=row['tLeft'], thickness_skin_right_in=row['tRight'],
                                          length=length, c=1, EModulus=EModulus, sigma_applied=row['sigma_XX_avg'])
     '''new_dim4 =  reverseColumn_Euler_DIM4(RF_goal=RFgoal , DIM01=row['dim1'], DIM02=row['dim2'], DIM03=row['dim3'], 
-                                       DIM04=row['dim4'], stringer_pitch_in=stringerPitch, thickness_skin_in=row['tLeft'],
+                                       DIM04=row['dim4'], stringer_pitch_in=stringerPitch, thickness_skin_left_in=row['tLeft'], thickness_skin_right_in=row['tRight'],
                                          length=length, c=1, EModulus=EModulus, sigma_applied=row['sigma_XX_avg'])'''
     return new_dim1, new_dim3 #, new_dim4
 
