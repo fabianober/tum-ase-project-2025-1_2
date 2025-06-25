@@ -30,20 +30,47 @@ USER_INPUTS = {
         # 5 skin panel thicknesses
         'skin_thickness_1', 'skin_thickness_2', 'skin_thickness_3', 'skin_thickness_4', 'skin_thickness_5'
     ],
-    'bounds': [(22, 30)] * 5 + #Dim1 (height)
-              [(15, 25)] * 5 + #Dim3 (head width)
-              [(10, 20)] * 5 + #Dim 4 (leg length)
-              [(1.2, 4)] * 5 + #Dim2 ("thickness")
-              [(4, 7)] * 5, #Skin thickness
+    'bounds': [
+        # web_height_1-5
+        (25.00, 36.00),
+        (25.00, 32.41),
+        (25.00, 37.01),
+        (25.00, 37.40),
+        (25.00, 35.28),
+        # flange_width_1-5
+        (20.70, 31.44),
+        (20.72, 29.91),
+        (20.07, 29.91),
+        (21.77, 33.97),
+        (20.05, 31.76),
+        # lip_height_1-5
+        (2.00, 9.96),
+        (2.00, 11.30),
+        (2.00, 12.13),
+        (2.00, 9.06),
+        (2.00, 11.75),
+        # thickness_1-5
+        (2.61, 5.50),
+        (2.61, 5.46),
+        (2.61, 5.48),
+        (2.14, 5.59),
+        (2.46, 5.47),
+        # skin_thickness_1-5
+        (4.58, 15.00),
+        (4.74, 15.00),
+        (4.76, 15.00),
+        (4.71, 15.00),
+        (5.43, 14.97)
+    ],
     'target_rf': 1.05,
-    'fem_call_budget': 6000,  # Can be increased
+    'fem_call_budget': 1000,  # Can be increased
     'log_folder': "optimizer_logs",
     'run_id_prefix': "wing_optim",
     'random_seed': None,
-    'sampling_fraction': 0.18,  # Fraction of budget for initial random sampling
-    'clustering_fraction': 0.22,  # Fraction of budget for region exploration
-    'ga_fraction': 0.45,  # Fraction of budget for GAs in clustered regions
-    'refine_fraction': 0.15,  # Remaining for final local refinement
+    'sampling_fraction': 1.00,  # Fraction of budget for initial random sampling
+    'clustering_fraction': 0.00,  # Fraction of budget for region exploration
+    'ga_fraction': 0.00,  # Fraction of budget for GAs in clustered regions
+    'refine_fraction': 0.00,  # Remaining for final local refinement
     'cluster_n': 4,  # Number of clusters/regions (can tune)
     'report_every': 500,
     'resume': True,  # Attempt to read and use previous logs
