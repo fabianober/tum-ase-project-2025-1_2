@@ -36,8 +36,8 @@ cleaUp_before = sys.argv[1]
 model = hm.Model()
 
 '''Parameters for running the generational algorithm'''
-NumGenerations = 10
-NumChildren = 25
+NumGenerations = 20
+NumChildren = 30
 NumReverse = 1 # beacuse we found out, nothing changes after the first reverse iteration
 
 # get the rounding_digits from the ini file
@@ -120,7 +120,7 @@ def evolution():
         bestPanelThickBefore = [4.0, 4.0, 4.0, 4.0, 4.0]
         bestStringerDimBefore = [[25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15]]
 
-    for RFgoal in np.arange(1, 1.7, 0.05): # we have to set the range to 11 because we want to run it from 0.9 to 1.0
+    for RFgoal in np.arange(1, 1.8, 0.05): # we have to set the range to 11 because we want to run it from 0.9 to 1.0
         changeParameters(bestPanelThickBefore, bestStringerDimBefore)  # Set the initial parameters before starting the evolution
         reverse(RFgoal_in=RFgoal)
 
@@ -206,7 +206,7 @@ def evolution():
     
        
 #reverse()
-#evolution()
+evolution()
 #resetAll(name=name)
 #Run_Optimisation_Ad_V3()
 
