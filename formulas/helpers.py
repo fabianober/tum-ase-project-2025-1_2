@@ -29,7 +29,8 @@ def crosssectional_properties_hat_skin_row(row, stringer_pitch, stringer_depth):
         DIM2=row['dim2'],
         DIM3=row['dim3'],
         DIM4=row['dim4'],
-        thickness_skin=row['thickness'],
+        thickness_skin_left=row['tLeft'],
+        thickness_skin_right=row['tRight'],
         stringer_pitch=stringer_pitch,
         stringer_depth=stringer_depth
     )

@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 import pandas as pd
 import matplotlib.pyplot as plt
 import ast
@@ -16,7 +5,10 @@ from matplotlib.widgets import Button
 
 plt.style.use('seaborn-v0_8-colorblind')
 
-CSV_PATH = r'.\data\fabian\output\generations.csv'
+with open("name.txt", "r") as f:
+    name = f.read().strip()
+
+CSV_PATH = rf'.\data\{name}\output\generations.csv'
 
 def load_data():
     df = pd.read_csv(

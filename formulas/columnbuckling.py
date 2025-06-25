@@ -43,7 +43,7 @@ def crosssectional_properties_tee_skin(height_str, width_str, thickness_web, thi
 
     return A_tot, I_y_bar
 
-def crosssectional_properties_hat_skin(DIM1, DIM2, DIM3, DIM4, thickness_skin, stringer_pitch, stringer_depth):
+def crosssectional_properties_hat_skin(DIM1, DIM2, DIM3, DIM4, thickness_skin_left,thickness_skin_right, stringer_pitch, stringer_depth):
     """
     DIM1: height of the hat section
     DIM2: thickness of hat elements
@@ -54,41 +54,46 @@ def crosssectional_properties_hat_skin(DIM1, DIM2, DIM3, DIM4, thickness_skin, s
     """
 
     # Area of each part
-    A_skin = stringer_pitch * thickness_skin
+    A_skin_left = stringer_pitch/2 * thickness_skin_left
+    A_skin_right = stringer_pitch/2 * thickness_skin_right
     A_top = DIM3 * DIM2
     A_side_web = DIM2 * (DIM1 - DIM2)
     A_bottom = DIM4 * DIM2
-    A_tot = A_skin + A_top + 2 * A_side_web + 2 * A_bottom
+    A_tot = A_skin_left+ A_skin_right + A_top + 2 * A_side_web + 2 * A_bottom
 
     V_tot = A_tot * stringer_depth  # Volume of the entire cross-section
 
     # z-coordinates (from bottom)
-    z_skin = -thickness_skin / 2
+    z_skin_left = -thickness_skin_left / 2
+    z_skin_right = -thickness_skin_right / 2
     z_bottom = DIM2 / 2
     z_web = (DIM1 - DIM2) / 2 #+ DIM2
     z_top = DIM1 - DIM2 / 2
 
     # Centroid (z_bar)
     z_bar = (
-        A_skin * z_skin +
+        A_skin_left * z_skin_left +
+        A_skin_right * z_skin_right+
         A_top * z_top +
         2 * A_side_web * z_web +
         2 * A_bottom * z_bottom
     ) / A_tot
 
     # Moment of inertia about y-axis for each component
-    I_y_skin = (stringer_pitch * thickness_skin**3) / 12
+    I_y_skin_left = (stringer_pitch/2 * thickness_skin_left**3) / 12
+    I_y_skin_right = (stringer_pitch/2 * thickness_skin_right**3) / 12
     I_y_top = (DIM3 * DIM2**3) / 12
     I_y_webs = 2 * (DIM2 * (DIM1 - DIM2)**3) / 12
     I_y_bottoms = 2 * (DIM4 * DIM2**3) / 12
 
     # Parallel axis theorem
-    contrib_skin = I_y_skin + A_skin * (z_skin - z_bar)**2
+    contrib_skin_left = I_y_skin_left + A_skin_left * (z_skin_left - z_bar)**2
+    contrib_skin_right = I_y_skin_right + A_skin_right * (z_skin_right - z_bar)**2
     contrib_top = I_y_top + A_top * (z_top - z_bar)**2
     contrib_webs = I_y_webs + 2 * A_side_web * (z_web - z_bar)**2
     contrib_bottoms = I_y_bottoms + 2 * A_bottom * (z_bottom - z_bar)**2 
 
-    I_yy = contrib_skin + contrib_top + contrib_webs + contrib_bottoms
+    I_yy = contrib_skin_left + contrib_skin_right + contrib_top + contrib_webs + contrib_bottoms
 
     return I_yy, A_tot, V_tot  # Return moment of inertia, area, and volume
 

@@ -14,11 +14,11 @@ from helpers import *
 
 
 # Parameters for the optimization 
-rfPosScaling = 90
+rfPosScaling = 5
 rfNegScaling = 500
 NegweightScaling = 850
-PosweightScaling = 50
-RF_goal = 1.03
+PosweightScaling = 1
+RF_goal = 1.1
 
 
 # Assign the RF a score 
@@ -42,7 +42,7 @@ def massScoreCalc(name):
 
 
 
-# Extracts the panel thickness from the stringer dataframe 
+# Extracts the panel thickness from the panel dataframe 
 def extractThickness(df):
     thicknesses = []
     for i in range(1,6):

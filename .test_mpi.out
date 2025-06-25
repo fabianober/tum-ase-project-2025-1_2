@@ -1,9 +1,9 @@
  Testing MPI Configuration
  MPI Standard version 3.1
  number of processes:  6
-process  0 DESKTOP-AJOI86F  cores:  12 ram:    2240MB
-process  4 DESKTOP-AJOI86F  cores:  12 ram:    2241MB
-process  1 DESKTOP-AJOI86F  cores:  12 ram:    2241MB
-process  2 DESKTOP-AJOI86F  cores:  12 ram:    2241MB
-process  3 DESKTOP-AJOI86F  cores:  12 ram:    2242MB
-process  5 DESKTOP-AJOI86F  cores:  12 ram:    2242MB
+process  0 DESKTOP-AJOI86F  cores:  12 ram:    2249MB
+process  1 DESKTOP-AJOI86F  cores:  12 ram:    2249MB
+process  4 DESKTOP-AJOI86F  cores:  12 ram:    2249MB
+process  2 DESKTOP-AJOI86F  cores:  12 ram:    2249MB
+process  3 DESKTOP-AJOI86F  cores:  12 ram:    2249MB
+process  5 DESKTOP-AJOI86F  cores:  12 ram:    2249MB

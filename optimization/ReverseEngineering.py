@@ -12,8 +12,8 @@ from columnBuckReverse import *
 
 
 # weigthing factors for dim1, dim3, dim4
-weightDim1 = 0.699
-weightDim3 = 0.3 
+weightDim1 = 1
+weightDim3 = 0.1
 weightDim4 = 0.001
 
 def assembleUpdate(name):
@@ -32,7 +32,7 @@ def assembleUpdate(name):
             newDims=[stringerDimsDf['dim1'][i]+ weightDim1* stringerDimsDf['diff_dim1'][i],
                     stringerDimsDf['dim2'][i],
                     stringerDimsDf['dim3'][i]+ weightDim3* stringerDimsDf['diff_dim3'][i],
-                    stringerDimsDf['dim4'][i]+ weightDim4* stringerDimsDf['diff_dim4'][i],
+                    stringerDimsDf['dim4'][i]
                     ]
             newStringerDims.append(newDims)
         return newPanelThick, newStringerDims

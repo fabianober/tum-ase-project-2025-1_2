@@ -25,7 +25,7 @@ def panelBuckReverse(row, EModulus, nu, RF_goal):
         widthBi = row['width']
     
 
-    # Compute the reverse thicnesses 
+    # Compute the reverse thicknesses 
     thicknessBi = reverseBiaxial(RF_goal=RF_goal, sigma_applied=sigma_appliedBi, k_bi=row['k_biaxial'], EModulus=EModulus, nu=nu, width=widthBi)
     thicknessShear = reverseShear(RF_goal=RF_goal, tau_applied=row['sigmaXY'], k_shear=row['k_shear'], EModulus=EModulus, nu=nu, width=row['width'])
     thickness = max(thicknessBi, thicknessShear)

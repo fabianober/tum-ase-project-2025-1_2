@@ -25,18 +25,20 @@ from change_properties import *
 from mass import *
 from calculate_panels import *
 from calculate_stringers import *
+from calculate_strength import *
 from generation import *
 from ReverseEngineering import *
 
 from run_optimizer_adaptiveV3_6_fin import *
 
+cleaUp_before = sys.argv[1]
+
 model = hm.Model()
 
 '''Parameters for running the generational algorithm'''
-NumGenerations = 2
-NumChildren = 3
-NumReverse = 5
-RFgoal = 0.9
+NumGenerations = 10
+NumChildren = 25
+NumReverse = 1 # beacuse we found out, nothing changes after the first reverse iteration
 
 # get the rounding_digits from the ini file
 config = configparser.ConfigParser()
@@ -56,6 +58,14 @@ print(f"Your name is: {name}")
 #calculate_panels(name=name)
 #calculate_stringers(name=name)
 #oneScoreDf(name=name, index=0)
+
+if cleaUp_before == "1":
+    output_dir = f'./data/{name}/output'
+    if os.path.exists(output_dir):
+        for filename in os.listdir(output_dir):
+            file_path = os.path.join(output_dir, filename)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
 
 # Here the generational algorithm is run 
 def resetAll(name):
@@ -86,7 +96,7 @@ def reverse(RFgoal_in):
             print("Aborting the reverse algorithm. Bye...")
             sys.exit()
 
-        print(f"Reverse iteration {i+1}/{NumReverse} with RFgoal: {RFgoal_in}")
+        print(f"Reverse iteration with RFgoal: {RFgoal_in}")
         newThick, newStringerDims = assembleUpdate(name)
         #print(newThick)
         changeParameters(newThick, newStringerDims)
@@ -110,8 +120,7 @@ def evolution():
         bestPanelThickBefore = [4.0, 4.0, 4.0, 4.0, 4.0]
         bestStringerDimBefore = [[25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15], [25,2,20,15]]
 
-    for i in range(0, 4): # we have to set the range to 11 because we want to run it from 0.9 to 1.0
-        RFgoal = 0.9 + i * 0.03
+    for RFgoal in np.arange(1, 1.7, 0.05): # we have to set the range to 11 because we want to run it from 0.9 to 1.0
         changeParameters(bestPanelThickBefore, bestStringerDimBefore)  # Set the initial parameters before starting the evolution
         reverse(RFgoal_in=RFgoal)
 
@@ -119,6 +128,7 @@ def evolution():
     child_times = []
     children_done = 0
     generationDf = pd.read_csv(f'./data/{name}/output/generations.csv')
+    generationDf = generationDf.sort_values(by='score', ascending=True).reset_index(drop=True)
     currentIndex = generationDf['GenIndex'].max()
     for i in range(0, NumGenerations):
         gen_start_time = time.time()
@@ -156,7 +166,7 @@ def evolution():
             rem_m = int((remaining_time % 3600) // 60)
             rem_s = int(remaining_time % 60)
             print(f'CHILD {j+1}/{NumChildren} gen{i+1}/{NumGenerations} DONE | {progress:.1f}% | Time: {child_duration:.2f} s | Remaining: {rem_h}h {rem_m}m {rem_s}s')
-            reverse(RFgoal_in=0.9)  # Call reverse with the current RFgoal
+           
         generationDf = pd.read_csv(f'./data/{name}/output/generations.csv')
         scoreDf = pd.read_csv(f'./data/{name}/output/children.csv')
         min_row = scoreDf.loc[scoreDf['score'].idxmin()]
@@ -173,17 +183,26 @@ def evolution():
         gen_end_time = time.time()
         gen_duration = gen_end_time - gen_start_time
         print(f'GENERATION {i+1}/{NumGenerations} DONE | Time: {gen_duration:.2f} s')
+        #reverse(RFgoal_in=0.9)  # Call reverse with the current RFgoal
         
-        print("We now take your best results and set the properties in the model to those values")
-        bestPanelThick = ast.literal_eval(generationDf['panel thickness'][0])
-        bestStringerDim = ast.literal_eval(generationDf['stringer Parameters'][0])
-        bestPanelThick = np.round(bestPanelThick, rounding_digits)
-        bestStringerDim = np.round(bestStringerDim, rounding_digits)
-        print(f"Your best panel thickness: {bestPanelThick}")
-        print(f"Your best stringer dimensions: {bestStringerDim}")
-        print("Setting the model to these values...")
-        changeParameters(bestPanelThick, bestStringerDim)
-        print(f"Your current model mass is: {round(generationDf['mass'][0], 3)} kg whilst your limit mass is {personal_data_provider(name=name)[3]} kg")
+    print("We now take your best results and set the properties in the model to those values")
+    bestPanelThick = ast.literal_eval(generationDf['panel thickness'][0])
+    bestStringerDim = ast.literal_eval(generationDf['stringer Parameters'][0])
+    bestPanelThick = np.round(bestPanelThick, rounding_digits)
+    bestStringerDim = np.round(bestStringerDim, rounding_digits)
+    print(f"Your best panel thickness: {bestPanelThick}")
+    print(f"Your best stringer dimensions: {bestStringerDim}")
+    print("Setting the model to these values...")
+    changeParameters(bestPanelThick, bestStringerDim)
+    writeOffset(name=name)
+    run_get_properties(name=name)
+    run_run_analysis(name=name)
+    run_get_stresses(name=name)
+    calculate_panels(name=name)
+    calculate_stringers(name=name)
+    calculate_strength(name=name)
+    write_mass_to_file(name=name)
+    print(f"Your current model mass is: {round(generationDf['mass'][0], 3)} kg whilst your limit mass is {personal_data_provider(name=name)[3]} kg")
     
        
 #reverse()
