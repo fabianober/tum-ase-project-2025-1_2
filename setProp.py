@@ -1,8 +1,3 @@
-
-print("Initializing main script...")
-print('-----------------------')
-
-
 import os
 import sys
 import pandas as pd
