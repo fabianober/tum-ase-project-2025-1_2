@@ -36,8 +36,8 @@ cleaUp_before = sys.argv[1]
 model = hm.Model()
 
 '''Parameters for running the generational algorithm'''
-NumGenerations = 20
-NumChildren = 30
+NumGenerations = 30
+NumChildren = 40
 NumReverse = 1 # beacuse we found out, nothing changes after the first reverse iteration
 
 # get the rounding_digits from the ini file
