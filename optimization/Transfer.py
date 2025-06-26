@@ -62,19 +62,32 @@ def fem_evaluate_vector(
     # Change parameters in model
     #print("Starting change parameters with input:")
     #print(skinThickness, stringerDim)
+    import psutil, os
+    process = psutil.Process(os.getpid())
+    #print(f"Before Param change; RSS = {process.memory_info().rss / 1024 ** 2:.2f} MB")
     changeParameters(skinThickness, stringerDim)
     # Compute geometric properties (if needed)
     #print("Running get properties")
+
+    #print(f"Before get_properties; RSS = {process.memory_info().rss / 1024 ** 2:.2f} MB")
     run_get_properties(person)
     # Run full FEA
     #print("Running analysis")
+
+    #print(f"Before run_analysis; RSS = {process.memory_info().rss / 1024 ** 2:.2f} MB")
     run_run_analysis(person)
 
+    #print(f"Before get_stresses; RSS = {process.memory_info().rss / 1024 ** 2:.2f} MB")
     run_get_stresses(person)
     # Calculate panel and stringer results (writes CSV)
     #print("Calculating RFs")
+
+    #print(f"Before calculate_panels; RSS = {process.memory_info().rss / 1024 ** 2:.2f} MB")
     calculate_panels(person)
+
+    #print(f"Before calculate_stringers; RSS = {process.memory_info().rss / 1024 ** 2:.2f} MB")
     calculate_stringers(person)
+    #print(f"After calculate_stringers; RSS = {process.memory_info().rss / 1024 ** 2:.2f} MB")
     #print("RFs claculated")
     #total_mass = total_mass(name=name)
     # Mass (robustly read)
@@ -119,4 +132,5 @@ def fem_evaluate_vector(
     else:
         rf_strength = np.array([min_rf], dtype=float)  # or np.array([], dtype=float) if your optimizer accepts
 
+    print(f"End of Tansfer.py; RSS = {process.memory_info().rss / 1024 ** 2:.2f} MB")
     return mass, rf_strength, rf_stability, rf_buckling

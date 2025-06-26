@@ -117,7 +117,7 @@ def sigma_crip(EModulus, DIM1, DIM2, DIM3, sigma_yield, r):
     else:
        ki2 = 0.41
     #Effective width of crippling-affected parts of the HAT-stringer 
-    b1 = DIM1 - DIM2/2*(1 - 0.2*(r**2/DIM2**2))
+    b1 = DIM1 - DIM2*(1 - 0.2*(r**2/DIM2**2))
     b2 = DIM3 - DIM2*(1 - 0.2*(r**2/DIM2**2))
     #slenderness of the crippling-affected parts of the HAT-stringer
     x1 = b1/DIM2 * math.sqrt(sigma_yield/(ki1*EModulus))
